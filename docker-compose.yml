@@ -1,0 +1,72 @@
+services:
+  pds:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: pds-core
+    ports:
+      - "${PDS_PORT:-3000}:3000"
+    env_file: .env
+    environment:
+      - PDS_PORT=3000
+    volumes:
+      - pds-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+
+  auth:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: auth-service
+    ports:
+      - "${AUTH_PORT:-3001}:3001"
+    env_file: .env
+    environment:
+      - AUTH_PORT=3001
+    volumes:
+      - auth-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      pds:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+
+  # Local email trap for development
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    profiles:
+      - dev
+
+volumes:
+  pds-data:
+  auth-data:
+  caddy-data:
+  caddy-config:

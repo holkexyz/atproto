@@ -1,0 +1,130 @@
+import { createLogger } from '@magic-pds/shared'
+import express from 'express'
+import cookieParser from 'cookie-parser'
+import { AuthServiceContext, type AuthServiceConfig } from './context.js'
+import { csrfProtection } from './middleware/csrf.js'
+import { requestRateLimit } from './middleware/rate-limit.js'
+import { createAuthorizeRouter } from './routes/authorize.js'
+import { createSendLinkRouter } from './routes/send-link.js'
+import { createVerifyRouter } from './routes/verify.js'
+import { createStatusRouter } from './routes/status.js'
+import { createConsentRouter } from './routes/consent.js'
+import { createRecoveryRouter } from './routes/recovery.js'
+import { createAccountLoginRouter } from './routes/account-login.js'
+import { createAccountSettingsRouter } from './routes/account-settings.js'
+import { accountAuth } from './middleware/account-auth.js'
+
+const logger = createLogger('auth-service')
+
+export function createAuthService(config: AuthServiceConfig): { app: express.Express; ctx: AuthServiceContext } {
+  const ctx = new AuthServiceContext(config)
+  const app = express()
+
+  // Middleware
+  app.set('trust proxy', 1)
+  app.use(express.urlencoded({ extended: true }))
+  app.use(express.json())
+  app.use(cookieParser())
+  app.use(csrfProtection(config.csrfSecret))
+  app.use(requestRateLimit({ windowMs: 60_000, maxRequests: 60 }))
+
+  // Security headers
+  app.use((_req, res, next) => {
+    res.setHeader('X-Frame-Options', 'DENY')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('Referrer-Policy', 'no-referrer')
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'"
+    )
+    res.setHeader(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload'
+    )
+    next()
+  })
+
+  // Account auth middleware (populates req.accountSession if logged in)
+  app.use(accountAuth(ctx))
+
+  // Routes
+  app.use(createAuthorizeRouter(ctx))
+  app.use(createSendLinkRouter(ctx))
+  app.use(createVerifyRouter(ctx))
+  app.use(createStatusRouter(ctx))
+  app.use(createConsentRouter(ctx))
+  app.use(createRecoveryRouter(ctx))
+  app.use(createAccountLoginRouter(ctx))
+  app.use(createAccountSettingsRouter(ctx))
+
+  // Health check
+  // Metrics endpoint (protect with admin auth in production)
+  app.get('/metrics', (req, res) => {
+    const adminPassword = process.env.PDS_ADMIN_PASSWORD
+    if (adminPassword) {
+      const authHeader = req.headers.authorization
+      if (!authHeader || authHeader !== 'Basic ' + Buffer.from('admin:' + adminPassword).toString('base64')) {
+        res.status(401).json({ error: 'Unauthorized' })
+        return
+      }
+    }
+    const metrics = ctx.db.getMetrics()
+    res.json({
+      ...metrics,
+      uptime: process.uptime(),
+      memoryUsage: process.memoryUsage().rss,
+      timestamp: Date.now(),
+    })
+  })
+
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'auth' })
+  })
+
+  return { app, ctx }
+}
+
+// Entry point when run directly
+function main() {
+  const config: AuthServiceConfig = {
+    hostname: process.env.AUTH_HOSTNAME || 'auth.localhost',
+    port: parseInt(process.env.AUTH_PORT || '3001', 10),
+    sessionSecret: process.env.AUTH_SESSION_SECRET || 'dev-session-secret-change-me',
+    csrfSecret: process.env.AUTH_CSRF_SECRET || 'dev-csrf-secret-change-me',
+    pdsHostname: process.env.PDS_HOSTNAME || 'localhost',
+    pdsPublicUrl: process.env.PDS_PUBLIC_URL || 'http://localhost:3000',
+    magicLink: {
+      expiryMinutes: parseInt(process.env.MAGIC_LINK_EXPIRY_MINUTES || '10', 10),
+      baseUrl: process.env.MAGIC_LINK_BASE_URL || 'http://auth.localhost:3001/auth/verify',
+      maxAttemptsPerToken: 3,
+    },
+    email: {
+      provider: (process.env.EMAIL_PROVIDER || 'smtp') as 'smtp',
+      smtpHost: process.env.SMTP_HOST || 'localhost',
+      smtpPort: parseInt(process.env.SMTP_PORT || '1025', 10),
+      smtpUser: process.env.SMTP_USER || undefined,
+      smtpPass: process.env.SMTP_PASS || undefined,
+      from: process.env.SMTP_FROM || 'noreply@localhost',
+      fromName: process.env.SMTP_FROM_NAME || 'Magic PDS',
+    },
+    dbLocation: process.env.DB_LOCATION || './data/magic-pds.sqlite',
+  }
+
+  const { app, ctx } = createAuthService(config)
+
+  const server = app.listen(config.port, () => {
+    logger.info({ port: config.port, hostname: config.hostname }, 'Auth service running')
+  })
+
+  const shutdown = () => {
+    logger.info('Auth service shutting down')
+    server.close()
+    ctx.destroy()
+    process.exit(0)
+  }
+
+  process.on('SIGTERM', shutdown)
+  process.on('SIGINT', shutdown)
+}
+
+main()
