@@ -30,13 +30,26 @@ export function createAuthService(config: AuthServiceConfig): { app: express.Exp
   app.use(requestRateLimit({ windowMs: 60_000, maxRequests: 60 }))
 
   // Security headers
-  app.use((_req, res, next) => {
+  app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', 'DENY')
     res.setHeader('X-Content-Type-Options', 'nosniff')
     res.setHeader('Referrer-Policy', 'no-referrer')
+
+    // Build img-src dynamically: allow the client's origin if a client_id URL is present
+    let imgSrc = "'self' data:"
+    const clientId = (req.query.client_id as string) || req.body?.client_id
+    if (clientId && typeof clientId === 'string') {
+      try {
+        const clientOrigin = new URL(clientId).origin
+        if (clientOrigin && clientOrigin !== 'null') {
+          imgSrc += ` ${clientOrigin}`
+        }
+      } catch { /* not a valid URL, keep default */ }
+    }
+
     res.setHeader(
       'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'"
+      `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src ${imgSrc}; connect-src 'self'`
     )
     res.setHeader(
       'Strict-Transport-Security',
