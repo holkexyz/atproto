@@ -12,8 +12,8 @@ const logger = createLogger('auth:auto-provision')
  * Returns the new DID on success, or null on failure.
  */
 export async function autoProvisionAccount(ctx: AuthServiceContext, email: string): Promise<string | null> {
-  const pdsUrl = ctx.config.pdsPublicUrl
-  const adminPassword = process.env.PDS_ADMIN_PASSWORD
+  // Use internal Docker URL to avoid going through Caddy
+  const pdsUrl = process.env.PDS_INTERNAL_URL || ctx.config.pdsPublicUrl
 
   const localPart = email.split('@')[0]?.replace(/[^a-zA-Z0-9]/g, '') || 'user'
   const suffix = crypto.randomBytes(4).toString('hex')
@@ -24,10 +24,7 @@ export async function autoProvisionAccount(ctx: AuthServiceContext, email: strin
   try {
     const res = await fetch(`${pdsUrl}/xrpc/com.atproto.server.createAccount`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(adminPassword ? { 'Authorization': 'Basic ' + Buffer.from(`admin:${adminPassword}`).toString('base64') } : {}),
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, handle, password }),
     })
 
