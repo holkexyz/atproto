@@ -74,7 +74,7 @@ function renderEmailForm(opts: {
       </div>
       <button type="submit" class="btn-primary">${opts.isSignup ? 'Create account' : 'Continue with email'}</button>
     </form>
-    ${opts.isSignup ? '' : '<a href="/auth/recover?request_uri=' + encodeURIComponent(opts.requestUri) + '" class="btn-secondary">Can&#39;t access your email?</a>'}
+    
   </div>
 </body>
 </html>`
