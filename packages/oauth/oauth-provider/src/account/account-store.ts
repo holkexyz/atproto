@@ -8,6 +8,7 @@ import { ClientId } from '../client/client-id.js'
 import { DeviceId } from '../device/device-id.js'
 import { DeviceData } from '../device/device-store.js'
 import { HcaptchaVerifyResult } from '../lib/hcaptcha.js'
+import { RequestMetadata } from '../lib/http/request.js'
 import { Awaitable, buildInterfaceChecker } from '../lib/util/type.js'
 import {
   HandleUnavailableError,
@@ -195,6 +196,21 @@ export interface AccountStore {
     requestIp: string | null
     userAgent: string | null
   }): Awaitable<void>
+
+  /**
+   * Verify an OTP code and return the account (creating one if needed).
+   * Optional — if not implemented, OTP authentication is not supported.
+   */
+  verifyOtp?(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    code: string
+    deviceMetadata: RequestMetadata
+  }): Awaitable<{
+    account: Account
+    accountCreated: boolean
+  }>
 }
 
 export const isAccountStore = buildInterfaceChecker<AccountStore>([

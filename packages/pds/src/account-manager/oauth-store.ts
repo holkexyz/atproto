@@ -1,4 +1,5 @@
 import assert from 'node:assert'
+import { randomBytes } from 'node:crypto'
 import { Client, createOp as createPlcOp } from '@did-plc/lib'
 import { Selectable } from 'kysely'
 import { Keypair, Secp256k1Keypair } from '@atproto/crypto'
@@ -56,13 +57,25 @@ import * as authorizedClientHelper from './helpers/authorized-client'
 import * as deviceHelper from './helpers/device'
 import * as lexiconHelper from './helpers/lexicon'
 import {
+  consumeOtpCode,
   generateOtp,
+  getOtpCode,
   getTrustedClient,
   hashUserAgent,
+  incrementOtpAttempts,
   insertOtpCode,
+  verifyOtp as verifyOtpCode,
 } from './helpers/otp'
 import * as tokenHelper from './helpers/token'
 import * as usedRefreshTokenHelper from './helpers/used-refresh-token'
+
+function generateRandomHandle(domain: string): string {
+  // Generate handle like: user-a7f3b2c1.domain
+  const suffix = randomBytes(4).toString('hex')
+  // Strip leading dot from domain if present (e.g. ".bsky.social" -> "bsky.social")
+  const domainClean = domain.startsWith('.') ? domain.slice(1) : domain
+  return `user-${suffix}.${domainClean}`
+}
 
 /**
  * This class' purpose is to implement the interface needed by the OAuthProvider
@@ -449,6 +462,82 @@ export class OAuthStore
         },
         { to: data.emailNorm },
       )
+    }
+  }
+
+  async verifyOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    code: string
+    deviceMetadata: { ipAddress: string; userAgent?: string; port: number }
+  }): Promise<{ account: Account; accountCreated: boolean }> {
+    // 1. Get the stored OTP
+    const otp = await getOtpCode(this.db, {
+      deviceId: data.deviceId,
+      emailNorm: data.emailNorm,
+    })
+
+    if (!otp || new Date(otp.expiresAt) < new Date()) {
+      throw new InvalidRequestError('Invalid or expired code')
+    }
+
+    if (otp.attempts >= otp.maxAttempts) {
+      await consumeOtpCode(this.db, otp.id)
+      throw new InvalidRequestError('Too many attempts, request a new code')
+    }
+
+    // 2. Verify the code
+    if (!verifyOtpCode(data.code, otp.codeHash, otp.salt)) {
+      await incrementOtpAttempts(this.db, otp.id)
+      throw new InvalidRequestError('Invalid code')
+    }
+
+    // 3. Code valid — consume it
+    await consumeOtpCode(this.db, otp.id)
+
+    // 4. Look up account
+    const existingAccount = await accountHelper.getAccountByEmail(
+      this.db,
+      data.emailNorm,
+    )
+
+    if (existingAccount) {
+      // Return existing account
+      return {
+        account: {
+          sub: existingAccount.did,
+          aud: this.serviceDid,
+          email: data.emailNorm,
+          email_verified: true,
+          preferred_username: existingAccount.handle || undefined,
+        },
+        accountCreated: false,
+      }
+    }
+
+    // 5. No account — create one with random handle
+    const domains = this.accountManager.serviceHandleDomains
+    const domain = domains[0] ?? 'bsky.social'
+    const handle = generateRandomHandle(domain)
+
+    const newAccount = await this.createAccount({
+      locale: 'en',
+      handle,
+      email: data.emailNorm,
+      password: randomBytes(32).toString('hex'),
+    })
+
+    // Mark email as confirmed since OTP verified it
+    await this.db.db
+      .updateTable('account')
+      .set({ emailConfirmedAt: new Date().toISOString() })
+      .where('did', '=', newAccount.sub)
+      .execute()
+
+    return {
+      account: { ...newAccount, email_verified: true },
+      accountCreated: true,
     }
   }
 

@@ -318,4 +318,17 @@ export class AccountManager {
     }
     await this.store.requestOtp(data)
   }
+
+  public async verifyOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    code: string
+    deviceMetadata: RequestMetadata
+  }): Promise<{ account: Account; accountCreated: boolean }> {
+    if (!this.store.verifyOtp) {
+      throw new InvalidRequestError('OTP authentication is not supported')
+    }
+    return this.store.verifyOtp(data)
+  }
 }

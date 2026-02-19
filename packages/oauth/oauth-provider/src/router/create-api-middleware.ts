@@ -636,6 +636,84 @@ export function createApiMiddleware<
     }),
   )
 
+  router.use(
+    apiRoute({
+      method: 'POST',
+      endpoint: '/otp-verify',
+      schema: z
+        .object({
+          email: emailSchema,
+          code: z
+            .string()
+            .length(6)
+            .regex(/^\d{6}$/),
+        })
+        .strict(),
+      rotateDeviceCookies: true,
+      async handler() {
+        const { deviceId, deviceMetadata, input, requestUri } = this
+
+        if (!requestUri) {
+          throw new InvalidRequestError(
+            'This endpoint can only be used in the context of an OAuth request',
+          )
+        }
+
+        const emailNorm = input.email.trim().toLowerCase()
+        const { clientId } = await server.requestManager.get(
+          requestUri,
+          deviceId,
+        )
+
+        // Delegate to AccountManager which delegates to AccountStore
+        const result = await server.accountManager.verifyOtp({
+          deviceId,
+          clientId,
+          emailNorm,
+          code: input.code,
+          deviceMetadata,
+        })
+
+        // Create ephemeral token (don't remember — this is an OAuth flow)
+        const ephemeralToken = await server.signer.createEphemeralToken({
+          sub: result.account.sub,
+          deviceId,
+          requestUri,
+        })
+
+        // Check if consent is required
+        const { clientId: reqClientId, parameters } =
+          await server.requestManager.get(requestUri, deviceId)
+        const { authorizedClients } = await server.accountManager.getAccount(
+          result.account.sub,
+        )
+        const consentRequired = server.checkConsentRequired(
+          parameters,
+          authorizedClients.get(reqClientId),
+        )
+
+        if (result.accountCreated) {
+          return {
+            json: {
+              accountCreated: true as const,
+              account: result.account,
+              ephemeralToken,
+              consentRequired,
+            },
+          }
+        }
+
+        return {
+          json: {
+            account: result.account,
+            ephemeralToken,
+            consentRequired,
+          },
+        }
+      },
+    }),
+  )
+
   return router.buildMiddleware()
 
   async function authenticate(
