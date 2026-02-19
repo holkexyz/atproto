@@ -213,7 +213,9 @@ export interface AccountStore {
   }>
 }
 
-export const isAccountStore = buildInterfaceChecker<AccountStore>([
+export const isAccountStore = buildInterfaceChecker<
+  Omit<AccountStore, 'requestOtp' | 'verifyOtp'>
+>([
   'createAccount',
   'authenticateAccount',
   'setAuthorizedClient',
