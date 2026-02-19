@@ -59,6 +59,25 @@ export class ServerMailer {
     })
   }
 
+  async sendOtpCode(
+    params: {
+      code: string
+      brandName: string
+      brandColor: string
+      logoUrl?: string | null
+      supportEmail?: string | null
+    },
+    mailOpts: { to: string },
+  ) {
+    const html = templates.otpCode(params)
+    await this.transporter.sendMail({
+      from: this.config.email?.fromAddress,
+      to: mailOpts.to,
+      subject: `${params.code} is your ${params.brandName} login code`,
+      html,
+    })
+  }
+
   private async sendTemplate<K extends keyof typeof templates>(
     templateName: K,
     params: Parameters<(typeof templates)[K]>[0],
