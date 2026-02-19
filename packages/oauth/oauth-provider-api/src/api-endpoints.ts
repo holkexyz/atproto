@@ -91,6 +91,32 @@ export type ApiEndpoints = {
     input: RejectInput
     output: { url: string }
   }
+  '/otp-request': {
+    method: 'POST'
+    input: {
+      email: string
+    }
+    output: Record<string, never>
+  }
+  '/otp-verify': {
+    method: 'POST'
+    input: {
+      email: string
+      code: string
+    }
+    output:
+      | {
+          account: Account
+          ephemeralToken?: string
+          consentRequired?: boolean
+        }
+      | {
+          accountCreated: true
+          account: Account
+          ephemeralToken?: string
+          consentRequired?: boolean
+        }
+  }
 }
 
 /**
