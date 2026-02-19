@@ -91,6 +91,7 @@ export function AuthorizeView({
   const {
     sessions,
     selectSub,
+    upsertSession,
     doValidateNewHandle,
     doSignUp,
     doSignIn,
@@ -171,6 +172,7 @@ export function AuthorizeView({
         sessions={sessions}
         selectSub={selectSub}
         onSignIn={doSignIn}
+        onAuthenticated={upsertSession}
         onSignUp={showSignUpIfAllowed}
         onBack={homeView === View.SignIn ? doReject : showHome}
         backLabel={homeView === View.SignIn ? t`Cancel` : undefined}

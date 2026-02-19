@@ -195,6 +195,7 @@ export function useApi({
   return {
     sessions,
     selectSub,
+    upsertSession,
 
     doSignIn,
     doInitiatePasswordReset,
