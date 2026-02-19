@@ -10,4 +10,10 @@ export type ClientInfo = {
    * clients)
    */
   isTrusted: boolean
+
+  /**
+   * Optional hex color string for branding (e.g. "#1A1A2E").
+   * Only set for trusted first-party clients.
+   */
+  brandColor?: string
 }

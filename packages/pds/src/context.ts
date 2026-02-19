@@ -28,6 +28,7 @@ import {
   unicastLookup,
 } from '@atproto-labs/fetch-node'
 import { AccountManager } from './account-manager/account-manager'
+import { getTrustedClient } from './account-manager/helpers/otp'
 import { OAuthStore } from './account-manager/oauth-store'
 import { ScopeReferenceGetter } from './account-manager/scope-reference-getter'
 import { ActorStore } from './actor-store/actor-store'
@@ -396,10 +397,23 @@ export class AppContext {
           // "scope" claim) do not need to be included in the token.
           accessTokenMode: AccessTokenMode.stateful,
 
-          getClientInfo(clientId) {
-            return {
-              isTrusted: cfg.oauth.provider?.trustedClients?.includes(clientId),
+          async getClientInfo(clientId) {
+            const isTrusted =
+              cfg.oauth.provider?.trustedClients?.includes(clientId) ?? false
+
+            if (isTrusted) {
+              const branding = await getTrustedClient(
+                accountManager.db,
+                clientId,
+              )
+              return {
+                isFirstParty: true,
+                isTrusted: true,
+                brandColor: branding?.brandColor ?? undefined,
+              }
             }
+
+            return { isTrusted: false }
           },
         })
       : undefined
