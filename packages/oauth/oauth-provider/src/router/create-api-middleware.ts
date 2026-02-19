@@ -180,12 +180,15 @@ export function createApiMiddleware<
             account.sub,
           )
 
+          const signInClient = await server.clientManager.getClient(clientId)
+
           const json = {
             account,
             ephemeralToken,
             consentRequired: server.checkConsentRequired(
               parameters,
               authorizedClients.get(clientId),
+              { isTrusted: signInClient.info.isTrusted },
             ),
           }
 
@@ -449,7 +452,7 @@ export function createApiMiddleware<
             )
 
             const clientData = authorizedClients.get(clientId)
-            if (server.checkConsentRequired(parameters, clientData)) {
+            if (server.checkConsentRequired(parameters, clientData, { isTrusted: client.info.isTrusted })) {
               const scopes = new Set(clientData?.authorizedScopes)
 
               // Add the newly accepted scopes to the authorized scopes
@@ -687,9 +690,11 @@ export function createApiMiddleware<
         const { authorizedClients } = await server.accountManager.getAccount(
           result.account.sub,
         )
+        const otpClient = await server.clientManager.getClient(reqClientId)
         const consentRequired = server.checkConsentRequired(
           parameters,
           authorizedClients.get(reqClientId),
+          { isTrusted: otpClient.info.isTrusted },
         )
 
         if (result.accountCreated) {
