@@ -8,6 +8,7 @@ import { ClientId } from '../client/client-id.js'
 import { DeviceId } from '../device/device-id.js'
 import { DeviceData } from '../device/device-store.js'
 import { HcaptchaVerifyResult } from '../lib/hcaptcha.js'
+import { RequestMetadata } from '../lib/http/request.js'
 import { Awaitable, buildInterfaceChecker } from '../lib/util/type.js'
 import {
   HandleUnavailableError,
@@ -183,9 +184,49 @@ export interface AccountStore {
    * @throws {HandleUnavailableError} - To indicate that the handle is already taken
    */
   verifyHandleAvailability(handle: string): Awaitable<void>
+
+  /**
+   * Generate and store an OTP code, then send a branded email if the account exists.
+   * Optional — if not implemented, OTP authentication is not supported.
+   */
+  requestOtp?(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    requestIp: string | null
+    userAgent: string | null
+  }): Awaitable<void>
+
+  /**
+   * Verify an OTP code and return the account (creating one if needed).
+   * Optional — if not implemented, OTP authentication is not supported.
+   */
+  verifyOtp?(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    code: string
+    deviceMetadata: RequestMetadata
+  }): Awaitable<{
+    account: Account
+    accountCreated: boolean
+  }>
+
+  /**
+   * Check and record OTP rate limits (per email, IP, and client).
+   * Optional — if not implemented, rate limiting is skipped.
+   * @throws {InvalidRequestError} - When rate limit is exceeded
+   */
+  checkOtpRateLimit?(data: {
+    emailNorm: string
+    ipAddress: string
+    clientId: string
+  }): Awaitable<void>
 }
 
-export const isAccountStore = buildInterfaceChecker<AccountStore>([
+export const isAccountStore = buildInterfaceChecker<
+  Omit<AccountStore, 'requestOtp' | 'verifyOtp' | 'checkOtpRateLimit'>
+>([
   'createAccount',
   'authenticateAccount',
   'setAuthorizedClient',

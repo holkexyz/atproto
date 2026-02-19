@@ -1,4 +1,5 @@
 import assert from 'node:assert'
+import { randomBytes } from 'node:crypto'
 import { Client, createOp as createPlcOp } from '@did-plc/lib'
 import { Selectable } from 'kysely'
 import { Keypair, Secp256k1Keypair } from '@atproto/crypto'
@@ -55,8 +56,33 @@ import * as authRequestHelper from './helpers/authorization-request'
 import * as authorizedClientHelper from './helpers/authorized-client'
 import * as deviceHelper from './helpers/device'
 import * as lexiconHelper from './helpers/lexicon'
+import {
+  checkRateLimit,
+  consumeOtpCode,
+  generateOtp,
+  getOtpCode,
+  getTrustedClient,
+  hashUserAgent,
+  incrementOtpAttempts,
+  insertOtpCode,
+  recordRateLimitHit,
+  verifyOtp as verifyOtpCode,
+} from './helpers/otp'
 import * as tokenHelper from './helpers/token'
 import * as usedRefreshTokenHelper from './helpers/used-refresh-token'
+
+function generateRandomHandle(domain: string): string {
+  // Generate handle like: user-a7f3b2c1d4e5f6a7.domain
+  // Use 64 bits (8 bytes) of randomness. The PDS handle constraint limits
+  // the prefix to 18 chars; "user-" is 5 chars, leaving 13 chars for the
+  // suffix. We encode the 8 random bytes as a 13-char lowercase base-36
+  // string (padded with leading zeros) so all 64 bits are preserved.
+  const n = BigInt('0x' + randomBytes(8).toString('hex'))
+  const suffix = n.toString(36).padStart(13, '0')
+  // Strip leading dot from domain if present (e.g. ".bsky.social" -> "bsky.social")
+  const domainClean = domain.startsWith('.') ? domain.slice(1) : domain
+  return `user-${suffix}.${domainClean}`
+}
 
 /**
  * This class' purpose is to implement the interface needed by the OAuthProvider
@@ -404,6 +430,175 @@ export class OAuthStore
 
       throw err
     }
+  }
+
+  async requestOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    requestIp: string | null
+    userAgent: string | null
+  }): Promise<void> {
+    const minTime = 500 // milliseconds — enough to cover SMTP variance
+    const start = Date.now()
+
+    try {
+      const { code, salt, codeHash } = generateOtp()
+
+      await insertOtpCode(this.db, {
+        deviceId: data.deviceId,
+        clientId: data.clientId,
+        emailNorm: data.emailNorm,
+        codeHash,
+        salt,
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+        requestIp: data.requestIp,
+        uaHash: hashUserAgent(data.userAgent ?? undefined),
+      })
+
+      // Only send email if account exists (prevents enumeration)
+      const account = await accountHelper.getAccountByEmail(
+        this.db,
+        data.emailNorm,
+      )
+      if (account) {
+        const branding = await getTrustedClient(this.db, data.clientId)
+        await this.mailer.sendOtpCode(
+          {
+            code,
+            brandName: branding?.brandName ?? 'Your account',
+            brandColor: branding?.brandColor ?? '#333333',
+            logoUrl: branding?.logoUrl,
+            supportEmail: branding?.supportEmail,
+          },
+          { to: data.emailNorm },
+        )
+      }
+    } finally {
+      // Ensure consistent response time regardless of account existence
+      // to prevent timing-based email enumeration attacks
+      const elapsed = Date.now() - start
+      if (elapsed < minTime) {
+        await new Promise((resolve) => setTimeout(resolve, minTime - elapsed))
+      }
+    }
+  }
+
+  async verifyOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    code: string
+    deviceMetadata: { ipAddress: string; userAgent?: string; port: number }
+  }): Promise<{ account: Account; accountCreated: boolean }> {
+    // Use a transaction to prevent TOCTOU race: SELECT + verify + DELETE are
+    // atomic. SQLite serializes transactions so two concurrent requests with
+    // the same valid code cannot both pass the hash check before either
+    // deletes the row.
+    //
+    // We return errors instead of throwing inside the transaction so that
+    // side-effects (consumeOtpCode, incrementOtpAttempts) are committed rather
+    // than rolled back on failure paths.
+    const otpErr = await this.db.transaction(async (dbTxn) => {
+      // 1. Get the stored OTP
+      const otp = await getOtpCode(dbTxn, {
+        deviceId: data.deviceId,
+        emailNorm: data.emailNorm,
+      })
+
+      if (!otp || new Date(otp.expiresAt) < new Date()) {
+        // Do NOT throw — return so the transaction commits (nothing to undo)
+        return new InvalidRequestError('Invalid or expired code')
+      }
+
+      if (otp.attempts >= otp.maxAttempts) {
+        await consumeOtpCode(dbTxn, otp.id)
+        // Do NOT throw — return so consumeOtpCode is committed
+        return new InvalidRequestError('Too many attempts, request a new code')
+      }
+
+      // 2. Verify the code
+      if (!verifyOtpCode(data.code, otp.codeHash, otp.salt)) {
+        await incrementOtpAttempts(dbTxn, otp.id)
+        // Do NOT throw — return so incrementOtpAttempts is committed
+        return new InvalidRequestError('Invalid code')
+      }
+
+      // 3. Code valid — atomically consume it within the same transaction
+      await consumeOtpCode(dbTxn, otp.id)
+    })
+
+    if (otpErr) throw otpErr
+
+    // 4. Account lookup and creation happens OUTSIDE the transaction
+    // (to avoid holding the transaction open during PLC/DID creation)
+    const existingAccount = await accountHelper.getAccountByEmail(
+      this.db,
+      data.emailNorm,
+    )
+
+    if (existingAccount) {
+      // Return existing account
+      return {
+        account: {
+          sub: existingAccount.did,
+          aud: this.serviceDid,
+          email: data.emailNorm,
+          email_verified: true,
+          preferred_username: existingAccount.handle || undefined,
+        },
+        accountCreated: false,
+      }
+    }
+
+    // 5. No account — create one with random handle (retry on collision)
+    const domains = this.accountManager.serviceHandleDomains
+    const domain = domains[0] ?? 'bsky.social'
+
+    let account: Account | undefined
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const handle = generateRandomHandle(domain)
+        account = await this.createAccount({
+          locale: 'en',
+          handle,
+          email: data.emailNorm,
+          password: randomBytes(32).toString('hex'),
+        })
+        break
+      } catch (err) {
+        if (attempt === 2) throw err
+        // Retry with a new random handle on collision
+      }
+    }
+    const newAccount = account!
+
+    // Mark email as confirmed since OTP verified it
+    await this.db.db
+      .updateTable('account')
+      .set({ emailConfirmedAt: new Date().toISOString() })
+      .where('did', '=', newAccount.sub)
+      .execute()
+
+    return {
+      account: { ...newAccount, email_verified: true },
+      accountCreated: true,
+    }
+  }
+
+  async checkOtpRateLimit(data: {
+    emailNorm: string
+    ipAddress: string
+    clientId: string
+  }): Promise<void> {
+    const WINDOW_MS = 15 * 60 * 1000
+    await checkRateLimit(this.db, `otp:email:${data.emailNorm}`, 3, WINDOW_MS)
+    await checkRateLimit(this.db, `otp:ip:${data.ipAddress}`, 10, WINDOW_MS)
+    await checkRateLimit(this.db, `otp:client:${data.clientId}`, 20, WINDOW_MS)
+    // Record the hit after all checks pass
+    await recordRateLimitHit(this.db, `otp:email:${data.emailNorm}`)
+    await recordRateLimitHit(this.db, `otp:ip:${data.ipAddress}`)
+    await recordRateLimitHit(this.db, `otp:client:${data.clientId}`)
   }
 
   // RequestStore

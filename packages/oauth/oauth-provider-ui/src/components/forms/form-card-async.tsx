@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { FormEvent, ReactNode, useCallback } from 'react'
+import { CSSProperties, FormEvent, ReactNode, useCallback } from 'react'
 import {
   UseAsyncActionOptions,
   useAsyncAction,
@@ -27,6 +27,7 @@ export type FormCardAsyncProps = Override<
 
     onSubmit: (signal: AbortSignal) => void | PromiseLike<void>
     submitLabel?: ReactNode
+    submitStyle?: CSSProperties
 
     onCancel?: () => void
     cancelLabel?: ReactNode
@@ -41,6 +42,7 @@ export function FormCardAsync({
 
   onSubmit,
   submitLabel,
+  submitStyle,
 
   onCancel = undefined,
   cancelLabel,
@@ -92,6 +94,7 @@ export function FormCardAsync({
           type="submit"
           loading={loading}
           disabled={disabled}
+          style={submitStyle}
         >
           {submitLabel || <Trans>Submit</Trans>}
         </Button>

@@ -27,6 +27,7 @@ export function sendAuthorizePageFactory(
           clientMetadata: data.client.metadata,
           clientTrusted: data.client.info.isTrusted,
           clientFirstParty: data.client.info.isFirstParty,
+          clientBrandColor: data.client.info.brandColor,
 
           scope: data.parameters.scope,
           uiLocales: data.parameters.ui_locales,

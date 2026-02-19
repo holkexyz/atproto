@@ -359,7 +359,11 @@ export class OAuthProvider extends OAuthVerifier {
   public checkConsentRequired(
     parameters: OAuthAuthorizationRequestParameters,
     clientData?: AuthorizedClientData,
+    { isTrusted = false }: { isTrusted?: boolean } = {},
   ) {
+    // Trusted clients (first-party apps) never require consent
+    if (isTrusted) return false
+
     // Client was never authorized before
     if (!clientData) return true
 
@@ -625,6 +629,7 @@ export class OAuthProvider extends OAuthVerifier {
         consentRequired: this.checkConsentRequired(
           parameters,
           deviceAccount.authorizedClients.get(client.id),
+          { isTrusted: client.info.isTrusted },
         ),
       }))
 

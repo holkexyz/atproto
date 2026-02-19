@@ -180,12 +180,15 @@ export function createApiMiddleware<
             account.sub,
           )
 
+          const signInClient = await server.clientManager.getClient(clientId)
+
           const json = {
             account,
             ephemeralToken,
             consentRequired: server.checkConsentRequired(
               parameters,
               authorizedClients.get(clientId),
+              { isTrusted: signInClient.info.isTrusted },
             ),
           }
 
@@ -449,7 +452,7 @@ export function createApiMiddleware<
             )
 
             const clientData = authorizedClients.get(clientId)
-            if (server.checkConsentRequired(parameters, clientData)) {
+            if (server.checkConsentRequired(parameters, clientData, { isTrusted: client.info.isTrusted })) {
               const scopes = new Set(clientData?.authorizedScopes)
 
               // Add the newly accepted scopes to the authorized scopes
@@ -566,6 +569,134 @@ export function createApiMiddleware<
           await server.requestManager.delete(requestUri).catch((err) => {
             onError?.(req, res, err, 'Failed to delete request')
           })
+        }
+      },
+    }),
+  )
+
+  router.use(
+    apiRoute({
+      method: 'POST',
+      endpoint: '/otp-request',
+      schema: z
+        .object({
+          email: emailSchema,
+        })
+        .strict(),
+      rotateDeviceCookies: true,
+      async handler() {
+        const { deviceId, deviceMetadata, input, requestUri } = this
+
+        if (!requestUri) {
+          throw new InvalidRequestError(
+            'This endpoint can only be used in the context of an OAuth request',
+          )
+        }
+
+        const emailNorm = input.email.trim().toLowerCase()
+
+        // Get the client_id from the authorization request
+        const { clientId } = await server.requestManager.get(
+          requestUri,
+          deviceId,
+        )
+
+        // Rate limiting: per email (3/15min), per IP (10/15min), per client_id (20/15min)
+        await server.accountManager.checkOtpRateLimit({
+          emailNorm,
+          ipAddress: deviceMetadata.ipAddress,
+          clientId,
+        })
+
+        await server.accountManager.requestOtp({
+          deviceId,
+          clientId,
+          emailNorm,
+          requestIp: deviceMetadata.ipAddress,
+          userAgent: deviceMetadata.userAgent ?? null,
+        })
+
+        // Always return empty 200
+        return { json: {} }
+      },
+    }),
+  )
+
+  router.use(
+    apiRoute({
+      method: 'POST',
+      endpoint: '/otp-verify',
+      schema: z
+        .object({
+          email: emailSchema,
+          code: z
+            .string()
+            .length(6)
+            .regex(/^\d{6}$/),
+        })
+        .strict(),
+      rotateDeviceCookies: true,
+      async handler() {
+        const { deviceId, deviceMetadata, input, requestUri } = this
+
+        if (!requestUri) {
+          throw new InvalidRequestError(
+            'This endpoint can only be used in the context of an OAuth request',
+          )
+        }
+
+        const emailNorm = input.email.trim().toLowerCase()
+        const { clientId } = await server.requestManager.get(
+          requestUri,
+          deviceId,
+        )
+
+        // Delegate to AccountManager which delegates to AccountStore
+        const result = await server.accountManager.verifyOtp({
+          deviceId,
+          clientId,
+          emailNorm,
+          code: input.code,
+          deviceMetadata,
+        })
+
+        // Create ephemeral token (don't remember — this is an OAuth flow)
+        const ephemeralToken = await server.signer.createEphemeralToken({
+          sub: result.account.sub,
+          deviceId,
+          requestUri,
+        })
+
+        // Check if consent is required
+        const { clientId: reqClientId, parameters } =
+          await server.requestManager.get(requestUri, deviceId)
+        const { authorizedClients } = await server.accountManager.getAccount(
+          result.account.sub,
+        )
+        const otpClient = await server.clientManager.getClient(reqClientId)
+        const consentRequired = server.checkConsentRequired(
+          parameters,
+          authorizedClients.get(reqClientId),
+          { isTrusted: otpClient.info.isTrusted },
+        )
+
+        if (result.accountCreated) {
+          return {
+            json: {
+              accountCreated: true as const,
+              account: result.account,
+              ephemeralToken,
+              consentRequired,
+            },
+          }
+        }
+
+        return {
+          json: {
+            account: result.account,
+            ephemeralToken,
+            consentRequired,
+          },
         }
       },
     }),

@@ -1,4 +1,3 @@
-import type { AuthorizeData } from '#/hydration-data.d.ts'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useEffect, useState } from 'react'
 import type { CustomizationData, Session } from '@atproto/oauth-provider-api'
@@ -15,6 +14,7 @@ import { ResetPasswordView } from './reset-password/reset-password-view.tsx'
 import { SignInView } from './sign-in/sign-in-view.tsx'
 import { SignUpView } from './sign-up/sign-up-view.tsx'
 import { WelcomeView } from './welcome/welcome-view.tsx'
+import type { AuthorizeData } from '#/hydration-data.d.ts'
 
 export type AuthorizeViewProps = Override<
   LayoutTitlePageProps,
@@ -89,8 +89,10 @@ export function AuthorizeView({
   >(undefined)
 
   const {
+    api,
     sessions,
     selectSub,
+    upsertSession,
     doValidateNewHandle,
     doSignUp,
     doSignIn,
@@ -167,10 +169,13 @@ export function AuthorizeView({
     return (
       <SignInView
         {...props}
+        api={api}
         loginHint={authorizeData.loginHint}
+        brandColor={authorizeData.clientBrandColor}
         sessions={sessions}
         selectSub={selectSub}
         onSignIn={doSignIn}
+        onAuthenticated={upsertSession}
         onSignUp={showSignUpIfAllowed}
         onBack={homeView === View.SignIn ? doReject : showHome}
         backLabel={homeView === View.SignIn ? t`Cancel` : undefined}

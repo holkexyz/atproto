@@ -193,8 +193,10 @@ export function useApi({
   }, [api, performRedirect])
 
   return {
+    api,
     sessions,
     selectSub,
+    upsertSession,
 
     doSignIn,
     doInitiatePasswordReset,

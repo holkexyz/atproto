@@ -1,0 +1,15 @@
+{
+  "client_id": "https://gainforest.org/.well-known/oauth-client-metadata",
+  "application_type": "web",
+  "client_name": "GainForest",
+  "client_uri": "https://gainforest.org",
+  "logo_uri": "https://gainforest.org/logo.png",
+  "redirect_uris": ["https://gainforest.org/oauth/callback"],
+  "scope": "atproto transition:generic",
+  "response_types": ["code"],
+  "grant_types": ["authorization_code", "refresh_token"],
+  "dpop_bound_access_tokens": true,
+  "token_endpoint_auth_method": "private_key_jwt",
+  "token_endpoint_auth_signing_alg": "ES256",
+  "jwks_uri": "https://gainforest.org/.well-known/jwks.json"
+}
