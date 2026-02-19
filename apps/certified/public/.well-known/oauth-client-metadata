@@ -1,0 +1,15 @@
+{
+  "client_id": "https://certified.earth/.well-known/oauth-client-metadata",
+  "application_type": "web",
+  "client_name": "Certified",
+  "client_uri": "https://certified.earth",
+  "logo_uri": "https://certified.earth/logo.png",
+  "redirect_uris": ["https://certified.earth/oauth/callback"],
+  "scope": "atproto transition:generic",
+  "response_types": ["code"],
+  "grant_types": ["authorization_code", "refresh_token"],
+  "dpop_bound_access_tokens": true,
+  "token_endpoint_auth_method": "private_key_jwt",
+  "token_endpoint_auth_signing_alg": "ES256",
+  "jwks_uri": "https://certified.earth/.well-known/jwks.json"
+}
