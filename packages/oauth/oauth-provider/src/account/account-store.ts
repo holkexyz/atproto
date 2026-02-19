@@ -211,6 +211,17 @@ export interface AccountStore {
     account: Account
     accountCreated: boolean
   }>
+
+  /**
+   * Check and record OTP rate limits (per email, IP, and client).
+   * Optional — if not implemented, rate limiting is skipped.
+   * @throws {InvalidRequestError} - When rate limit is exceeded
+   */
+  checkOtpRateLimit?(data: {
+    emailNorm: string
+    ipAddress: string
+    clientId: string
+  }): Awaitable<void>
 }
 
 export const isAccountStore = buildInterfaceChecker<

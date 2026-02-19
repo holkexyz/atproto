@@ -331,4 +331,14 @@ export class AccountManager {
     }
     return this.store.verifyOtp(data)
   }
+
+  public async checkOtpRateLimit(data: {
+    emailNorm: string
+    ipAddress: string
+    clientId: string
+  }): Promise<void> {
+    if (this.store.checkOtpRateLimit) {
+      await this.store.checkOtpRateLimit(data)
+    }
+  }
 }

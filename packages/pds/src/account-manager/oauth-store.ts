@@ -546,17 +546,27 @@ export class OAuthStore
       }
     }
 
-    // 5. No account — create one with random handle
+    // 5. No account — create one with random handle (retry on collision)
     const domains = this.accountManager.serviceHandleDomains
     const domain = domains[0] ?? 'bsky.social'
-    const handle = generateRandomHandle(domain)
 
-    const newAccount = await this.createAccount({
-      locale: 'en',
-      handle,
-      email: data.emailNorm,
-      password: randomBytes(32).toString('hex'),
-    })
+    let account: Account | undefined
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const handle = generateRandomHandle(domain)
+        account = await this.createAccount({
+          locale: 'en',
+          handle,
+          email: data.emailNorm,
+          password: randomBytes(32).toString('hex'),
+        })
+        break
+      } catch (err) {
+        if (attempt === 2) throw err
+        // Retry with a new random handle on collision
+      }
+    }
+    const newAccount = account!
 
     // Mark email as confirmed since OTP verified it
     await this.db.db

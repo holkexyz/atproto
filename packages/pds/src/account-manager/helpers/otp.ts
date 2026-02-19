@@ -1,5 +1,6 @@
 import { randomBytes, createHash, timingSafeEqual, randomInt } from 'node:crypto'
 import { sql } from 'kysely'
+import { InvalidRequestError } from '@atproto/xrpc-server'
 import { AccountDb } from '../db/index.js'
 
 // ---------------------------------------------------------------------------
@@ -7,7 +8,7 @@ import { AccountDb } from '../db/index.js'
 // ---------------------------------------------------------------------------
 
 export function generateOtp(): { code: string; salt: string; codeHash: string } {
-  const code = randomInt(100000, 999999).toString()
+  const code = randomInt(100000, 1000000).toString()
   const salt = randomBytes(16).toString('hex')
   const codeHash = createHash('sha256').update(salt + code).digest('hex')
   return { code, salt, codeHash }
@@ -88,7 +89,6 @@ export async function getOtpCode(
     .selectAll()
     .where('deviceId', '=', params.deviceId)
     .where('emailNorm', '=', params.emailNorm)
-    .where('usedAt', 'is', null)
     .executeTakeFirst()
 }
 
@@ -111,5 +111,47 @@ export async function deleteExpiredOtpCodes(db: AccountDb) {
   await db.db
     .deleteFrom('otp_code')
     .where('expiresAt', '<', new Date().toISOString())
+    .execute()
+}
+
+// ---------------------------------------------------------------------------
+// OTP Rate Limiting (SQLite-backed)
+// ---------------------------------------------------------------------------
+
+export async function checkRateLimit(
+  db: AccountDb,
+  key: string,
+  maxRequests: number,
+  windowMs: number,
+): Promise<void> {
+  const windowStart = new Date(Date.now() - windowMs).toISOString()
+
+  const result = await db.db
+    .selectFrom('otp_rate_limit')
+    .select(db.db.fn.count<number>('id').as('count'))
+    .where('key', '=', key)
+    .where('createdAt', '>', windowStart)
+    .executeTakeFirst()
+
+  if (result && result.count >= maxRequests) {
+    throw new InvalidRequestError('Too many requests, please try again later')
+  }
+}
+
+export async function recordRateLimitHit(
+  db: AccountDb,
+  key: string,
+): Promise<void> {
+  await db.db
+    .insertInto('otp_rate_limit')
+    .values({ key, createdAt: new Date().toISOString() })
+    .execute()
+}
+
+export async function cleanupRateLimits(db: AccountDb): Promise<void> {
+  const cutoff = new Date(Date.now() - 15 * 60 * 1000).toISOString()
+  await db.db
+    .deleteFrom('otp_rate_limit')
+    .where('createdAt', '<', cutoff)
     .execute()
 }

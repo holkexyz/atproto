@@ -30,7 +30,10 @@ import { httpLogger, loggerMiddleware } from './logger'
 import { proxyHandler } from './pipethrough'
 import compression from './util/compression'
 import * as wellKnown from './well-known'
-import { deleteExpiredOtpCodes } from './account-manager/helpers/otp'
+import {
+  cleanupRateLimits,
+  deleteExpiredOtpCodes,
+} from './account-manager/helpers/otp'
 
 export { createSecretKeyObject } from './auth-verifier'
 export * from './config'
@@ -182,6 +185,7 @@ export class PDS {
     this.otpCleanupInterval = setInterval(async () => {
       try {
         await deleteExpiredOtpCodes(this.ctx.accountManager.db)
+        await cleanupRateLimits(this.ctx.accountManager.db)
       } catch (err) {
         httpLogger.error({ err }, 'Failed to clean up expired OTP codes')
       }
