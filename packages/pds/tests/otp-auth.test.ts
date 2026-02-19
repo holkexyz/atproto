@@ -18,8 +18,8 @@ import { EventEmitter, once } from 'node:events'
 import * as http from 'node:http'
 import Mail from 'nodemailer/lib/mailer'
 import { TestNetworkNoAppView } from '@atproto/dev-env'
-import { ServerMailer } from '../src/mailer'
 import { AppContext } from '../src'
+import { ServerMailer } from '../src/mailer'
 
 // ---------------------------------------------------------------------------
 // HTTP helper
@@ -404,7 +404,10 @@ describe('OTP authentication flow', () => {
     )
     const { code, salt, codeHash } = generateOtp()
 
-    await db.db.deleteFrom('otp_code').where('emailNorm', '=', newEmail).execute()
+    await db.db
+      .deleteFrom('otp_code')
+      .where('emailNorm', '=', newEmail)
+      .execute()
     await db.db
       .insertInto('otp_code')
       .values({
@@ -440,8 +443,10 @@ describe('OTP authentication flow', () => {
     expect(verifyData.account.email).toBe(newEmail)
     expect(verifyData.account.sub).toMatch(/^did:plc:/)
 
-    // Handle should be auto-generated (user-{hex}.test)
-    expect(verifyData.account.preferred_username).toMatch(/^user-[0-9a-f]{8}\./)
+    // Handle should be auto-generated (user-{base36}.test) with 13 base-36 chars (64 bits)
+    expect(verifyData.account.preferred_username).toMatch(
+      /^user-[0-9a-z]{13}\./,
+    )
 
     // Verify the account was created in the DB
     const createdAccount = await db.db
@@ -569,8 +574,15 @@ describe('OTP authentication flow', () => {
 
     // The 6th attempt should return an error about too many attempts
     expect(lastResult!.status).toBe(400)
-    const errorData = lastResult!.data as { error: string; message?: string }
+    const errorData = lastResult!.data as {
+      error: string
+      message?: string
+      error_description?: string
+    }
     expect(errorData.error).toBeDefined()
+    expect(errorData.error_description || errorData.message).toContain(
+      'Too many attempts',
+    )
 
     // OTP record should be deleted after max attempts
     // @ts-expect-error accessing internal db
@@ -589,35 +601,27 @@ describe('OTP authentication flow', () => {
   // -------------------------------------------------------------------------
 
   it('error: OTP request without OAuth session returns error', async () => {
-    // Get a CSRF token by hitting the authorize page without a valid request_uri
-    // We'll use a fresh cookie jar and make a request to the account page
-    const cookieJar = new CookieJar()
-
     // First, get device cookies from a PAR + authorize flow
-    const { requestUri, cookieJar: flowCookieJar } =
-      await startOAuthFlow(pdsUrl)
+    const { cookieJar: flowCookieJar } = await startOAuthFlow(pdsUrl)
 
     // Now make an OTP request WITHOUT a request_uri in the referer
     // (i.e., referer is /account instead of /oauth/authorize?request_uri=...)
     const csrfToken = flowCookieJar.get(CSRF_COOKIE_NAME)
     const bodyStr = JSON.stringify({ email: 'no-session@test.com' })
 
-    const res = await httpRequest(
-      `${pdsUrl}${API_PREFIX}/otp-request`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Sec-Fetch-Mode': 'same-origin',
-          'Sec-Fetch-Site': 'same-origin',
-          Origin: pdsUrl,
-          Referer: `${pdsUrl}/account`, // NOT the authorize page
-          ...(csrfToken ? { [CSRF_HEADER_NAME]: csrfToken } : {}),
-          Cookie: flowCookieJar.toHeader(),
-        },
-        body: bodyStr,
+    const res = await httpRequest(`${pdsUrl}${API_PREFIX}/otp-request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Sec-Fetch-Mode': 'same-origin',
+        'Sec-Fetch-Site': 'same-origin',
+        Origin: pdsUrl,
+        Referer: `${pdsUrl}/account`, // NOT the authorize page
+        ...(csrfToken ? { [CSRF_HEADER_NAME]: csrfToken } : {}),
+        Cookie: flowCookieJar.toHeader(),
       },
-    )
+      body: bodyStr,
+    })
 
     // Should fail because the endpoint requires an OAuth flow context
     expect(res.status).toBe(400)

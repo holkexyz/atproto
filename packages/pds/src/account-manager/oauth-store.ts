@@ -72,8 +72,13 @@ import * as tokenHelper from './helpers/token'
 import * as usedRefreshTokenHelper from './helpers/used-refresh-token'
 
 function generateRandomHandle(domain: string): string {
-  // Generate handle like: user-a7f3b2c1d4e5f6a7.domain (64 bits to reduce collision probability)
-  const suffix = randomBytes(8).toString('hex')
+  // Generate handle like: user-a7f3b2c1d4e5f6a7.domain
+  // Use 64 bits (8 bytes) of randomness. The PDS handle constraint limits
+  // the prefix to 18 chars; "user-" is 5 chars, leaving 13 chars for the
+  // suffix. We encode the 8 random bytes as a 13-char lowercase base-36
+  // string (padded with leading zeros) so all 64 bits are preserved.
+  const n = BigInt('0x' + randomBytes(8).toString('hex'))
+  const suffix = n.toString(36).padStart(13, '0')
   // Strip leading dot from domain if present (e.g. ".bsky.social" -> "bsky.social")
   const domainClean = domain.startsWith('.') ? domain.slice(1) : domain
   return `user-${suffix}.${domainClean}`

@@ -11,7 +11,6 @@ export interface OtpCode {
   maxAttempts: Generated<number>
   expiresAt: string
   createdAt: Generated<string>
-  usedAt: string | null
   requestIp: string | null
   uaHash: string | null
 }

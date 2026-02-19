@@ -119,7 +119,11 @@ export class ClientManager {
     const isTrusted = partialInfo?.isTrusted ?? isFirstParty
     const brandColor = partialInfo?.brandColor
 
-    return new Client(clientId, metadata, jwks, { isFirstParty, isTrusted, brandColor })
+    return new Client(clientId, metadata, jwks, {
+      isFirstParty,
+      isTrusted,
+      brandColor,
+    })
   }
 
   public async loadClients(

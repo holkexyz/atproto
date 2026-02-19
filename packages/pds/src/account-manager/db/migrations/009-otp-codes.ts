@@ -15,7 +15,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn('createdAt', 'varchar', (col) =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     )
-    .addColumn('usedAt', 'varchar')
     .addColumn('requestIp', 'varchar')
     .addColumn('uaHash', 'varchar')
     .execute()

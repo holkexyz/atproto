@@ -39,8 +39,7 @@ export class Api extends JsonClient<ApiEndpoints> {
     consentRequired?: boolean
     accountCreated?: boolean
   }> {
-    const result = await this.fetch('POST', '/otp-verify', { email, code })
-    return result as any // Type assertion — the endpoint types are defined in oauth-provider-api
+    return this.fetch('POST', '/otp-verify', { email, code })
   }
 
   // Override the parent's parseError method to handle expected error responses

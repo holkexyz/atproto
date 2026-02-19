@@ -18,6 +18,10 @@ import {
   ResponseType,
   XRPCError,
 } from '@atproto/xrpc-server'
+import {
+  cleanupRateLimits,
+  deleteExpiredOtpCodes,
+} from './account-manager/helpers/otp'
 import apiRoutes from './api'
 import * as authRoutes from './auth-routes'
 import * as basicRoutes from './basic-routes'
@@ -30,10 +34,6 @@ import { httpLogger, loggerMiddleware } from './logger'
 import { proxyHandler } from './pipethrough'
 import compression from './util/compression'
 import * as wellKnown from './well-known'
-import {
-  cleanupRateLimits,
-  deleteExpiredOtpCodes,
-} from './account-manager/helpers/otp'
 
 export { createSecretKeyObject } from './auth-verifier'
 export * from './config'
@@ -182,14 +182,17 @@ export class PDS {
     this.server.keepAliveTimeout = 90000
     this.terminator = createHttpTerminator({ server })
     await events.once(server, 'listening')
-    this.otpCleanupInterval = setInterval(async () => {
-      try {
-        await deleteExpiredOtpCodes(this.ctx.accountManager.db)
-        await cleanupRateLimits(this.ctx.accountManager.db)
-      } catch (err) {
-        httpLogger.error({ err }, 'Failed to clean up expired OTP codes')
-      }
-    }, 5 * 60 * 1000) // Every 5 minutes
+    this.otpCleanupInterval = setInterval(
+      async () => {
+        try {
+          await deleteExpiredOtpCodes(this.ctx.accountManager.db)
+          await cleanupRateLimits(this.ctx.accountManager.db)
+        } catch (err) {
+          httpLogger.error({ err }, 'Failed to clean up expired OTP codes')
+        }
+      },
+      5 * 60 * 1000,
+    ) // Every 5 minutes
     return server
   }
 

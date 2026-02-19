@@ -14,6 +14,7 @@ import { SignInPicker } from './sign-in-picker.tsx'
 export type SignInViewProps = Override<
   LayoutTitlePageProps,
   {
+    api: Api
     sessions: readonly Session[]
     selectSub: (sub: string | null) => void
     loginHint?: string
@@ -36,6 +37,7 @@ export type SignInViewProps = Override<
 >
 
 export function SignInView({
+  api,
   loginHint,
   sessions,
   selectSub,
@@ -58,9 +60,6 @@ export function SignInView({
   const clearSession = useCallback(() => selectSub(null), [selectSub])
   const accounts = useMemo(() => sessions.map((s) => s.account), [sessions])
   const [showSignInForm, setShowSignInForm] = useState(sessions.length === 0)
-
-  // Create a local Api instance for OTP calls
-  const [api] = useState(() => new Api())
 
   // Default to OTP mode when onAuthenticated is provided; otherwise fall back to password
   const [mode, setMode] = useState<'otp' | 'password'>(

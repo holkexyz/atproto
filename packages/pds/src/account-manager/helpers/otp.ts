@@ -1,4 +1,9 @@
-import { randomBytes, createHash, timingSafeEqual, randomInt } from 'node:crypto'
+import {
+  createHash,
+  randomBytes,
+  randomInt,
+  timingSafeEqual,
+} from 'node:crypto'
 import { sql } from 'kysely'
 import { InvalidRequestError } from '@atproto/xrpc-server'
 import { AccountDb } from '../db/index.js'
@@ -7,10 +12,16 @@ import { AccountDb } from '../db/index.js'
 // OTP Generation and Verification
 // ---------------------------------------------------------------------------
 
-export function generateOtp(): { code: string; salt: string; codeHash: string } {
+export function generateOtp(): {
+  code: string
+  salt: string
+  codeHash: string
+} {
   const code = randomInt(100000, 1000000).toString()
   const salt = randomBytes(16).toString('hex')
-  const codeHash = createHash('sha256').update(salt + code).digest('hex')
+  const codeHash = createHash('sha256')
+    .update(salt + code)
+    .digest('hex')
   return { code, salt, codeHash }
 }
 
