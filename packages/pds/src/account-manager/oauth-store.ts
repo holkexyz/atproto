@@ -57,6 +57,7 @@ import * as authorizedClientHelper from './helpers/authorized-client'
 import * as deviceHelper from './helpers/device'
 import * as lexiconHelper from './helpers/lexicon'
 import {
+  checkRateLimit,
   consumeOtpCode,
   generateOtp,
   getOtpCode,
@@ -64,14 +65,15 @@ import {
   hashUserAgent,
   incrementOtpAttempts,
   insertOtpCode,
+  recordRateLimitHit,
   verifyOtp as verifyOtpCode,
 } from './helpers/otp'
 import * as tokenHelper from './helpers/token'
 import * as usedRefreshTokenHelper from './helpers/used-refresh-token'
 
 function generateRandomHandle(domain: string): string {
-  // Generate handle like: user-a7f3b2c1.domain
-  const suffix = randomBytes(4).toString('hex')
+  // Generate handle like: user-a7f3b2c1d4e5f6a7.domain (64 bits to reduce collision probability)
+  const suffix = randomBytes(8).toString('hex')
   // Strip leading dot from domain if present (e.g. ".bsky.social" -> "bsky.social")
   const domainClean = domain.startsWith('.') ? domain.slice(1) : domain
   return `user-${suffix}.${domainClean}`
@@ -484,31 +486,47 @@ export class OAuthStore
     code: string
     deviceMetadata: { ipAddress: string; userAgent?: string; port: number }
   }): Promise<{ account: Account; accountCreated: boolean }> {
-    // 1. Get the stored OTP
-    const otp = await getOtpCode(this.db, {
-      deviceId: data.deviceId,
-      emailNorm: data.emailNorm,
+    // Use a transaction to prevent TOCTOU race: SELECT + verify + DELETE are
+    // atomic. SQLite serializes transactions so two concurrent requests with
+    // the same valid code cannot both pass the hash check before either
+    // deletes the row.
+    //
+    // We return errors instead of throwing inside the transaction so that
+    // side-effects (consumeOtpCode, incrementOtpAttempts) are committed rather
+    // than rolled back on failure paths.
+    const otpErr = await this.db.transaction(async (dbTxn) => {
+      // 1. Get the stored OTP
+      const otp = await getOtpCode(dbTxn, {
+        deviceId: data.deviceId,
+        emailNorm: data.emailNorm,
+      })
+
+      if (!otp || new Date(otp.expiresAt) < new Date()) {
+        // Do NOT throw — return so the transaction commits (nothing to undo)
+        return new InvalidRequestError('Invalid or expired code')
+      }
+
+      if (otp.attempts >= otp.maxAttempts) {
+        await consumeOtpCode(dbTxn, otp.id)
+        // Do NOT throw — return so consumeOtpCode is committed
+        return new InvalidRequestError('Too many attempts, request a new code')
+      }
+
+      // 2. Verify the code
+      if (!verifyOtpCode(data.code, otp.codeHash, otp.salt)) {
+        await incrementOtpAttempts(dbTxn, otp.id)
+        // Do NOT throw — return so incrementOtpAttempts is committed
+        return new InvalidRequestError('Invalid code')
+      }
+
+      // 3. Code valid — atomically consume it within the same transaction
+      await consumeOtpCode(dbTxn, otp.id)
     })
 
-    if (!otp || new Date(otp.expiresAt) < new Date()) {
-      throw new InvalidRequestError('Invalid or expired code')
-    }
+    if (otpErr) throw otpErr
 
-    if (otp.attempts >= otp.maxAttempts) {
-      await consumeOtpCode(this.db, otp.id)
-      throw new InvalidRequestError('Too many attempts, request a new code')
-    }
-
-    // 2. Verify the code
-    if (!verifyOtpCode(data.code, otp.codeHash, otp.salt)) {
-      await incrementOtpAttempts(this.db, otp.id)
-      throw new InvalidRequestError('Invalid code')
-    }
-
-    // 3. Code valid — consume it
-    await consumeOtpCode(this.db, otp.id)
-
-    // 4. Look up account
+    // 4. Account lookup and creation happens OUTSIDE the transaction
+    // (to avoid holding the transaction open during PLC/DID creation)
     const existingAccount = await accountHelper.getAccountByEmail(
       this.db,
       data.emailNorm,
@@ -551,6 +569,21 @@ export class OAuthStore
       account: { ...newAccount, email_verified: true },
       accountCreated: true,
     }
+  }
+
+  async checkOtpRateLimit(data: {
+    emailNorm: string
+    ipAddress: string
+    clientId: string
+  }): Promise<void> {
+    const WINDOW_MS = 15 * 60 * 1000
+    await checkRateLimit(this.db, `otp:email:${data.emailNorm}`, 3, WINDOW_MS)
+    await checkRateLimit(this.db, `otp:ip:${data.ipAddress}`, 10, WINDOW_MS)
+    await checkRateLimit(this.db, `otp:client:${data.clientId}`, 20, WINDOW_MS)
+    // Record the hit after all checks pass
+    await recordRateLimitHit(this.db, `otp:email:${data.emailNorm}`)
+    await recordRateLimitHit(this.db, `otp:ip:${data.ipAddress}`)
+    await recordRateLimitHit(this.db, `otp:client:${data.clientId}`)
   }
 
   // RequestStore
