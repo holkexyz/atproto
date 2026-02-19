@@ -11,7 +11,9 @@ import * as lexicon from './lexicon'
 import * as refreshToken from './refresh-token'
 import * as repoRoot from './repo-root'
 import * as token from './token'
+import * as trustedClient from './trusted-client'
 import * as usedRefreshToken from './used-refresh-token'
+import * as otpCode from './otp-code'
 
 export type DatabaseSchema = actor.PartialDB &
   account.PartialDB &
@@ -26,7 +28,9 @@ export type DatabaseSchema = actor.PartialDB &
   repoRoot.PartialDB &
   inviteCode.PartialDB &
   lexicon.PartialDB &
-  emailToken.PartialDB
+  emailToken.PartialDB &
+  trustedClient.PartialDB &
+  otpCode.PartialDB
 
 export type { Actor, ActorEntry } from './actor'
 export type { Account, AccountEntry } from './account'
