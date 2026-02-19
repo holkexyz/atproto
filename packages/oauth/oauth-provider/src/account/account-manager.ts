@@ -305,4 +305,17 @@ export class AccountManager {
       return this.store.verifyHandleAvailability(handle)
     })
   }
+
+  public async requestOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    requestIp: string | null
+    userAgent: string | null
+  }): Promise<void> {
+    if (!this.store.requestOtp) {
+      throw new InvalidRequestError('OTP authentication is not supported')
+    }
+    await this.store.requestOtp(data)
+  }
 }

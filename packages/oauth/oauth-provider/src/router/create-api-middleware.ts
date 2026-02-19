@@ -571,6 +571,71 @@ export function createApiMiddleware<
     }),
   )
 
+  // Simple in-memory rate limiter: { key -> [timestamps] }
+  const otpRateLimitWindows = new Map<string, number[]>()
+  const OTP_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
+
+  function checkOtpRateLimit(key: string, maxRequests: number): void {
+    const now = Date.now()
+    const cutoff = now - OTP_WINDOW_MS
+    const timestamps = (otpRateLimitWindows.get(key) ?? []).filter(
+      (t) => t > cutoff,
+    )
+    if (timestamps.length >= maxRequests) {
+      throw new InvalidRequestError('Too many requests, please try again later')
+    }
+    timestamps.push(now)
+    otpRateLimitWindows.set(key, timestamps)
+  }
+
+  router.use(
+    apiRoute({
+      method: 'POST',
+      endpoint: '/otp-request',
+      schema: z
+        .object({
+          email: emailSchema,
+        })
+        .strict(),
+      rotateDeviceCookies: true,
+      async handler() {
+        const { deviceId, deviceMetadata, input, requestUri } = this
+
+        if (!requestUri) {
+          throw new InvalidRequestError(
+            'This endpoint can only be used in the context of an OAuth request',
+          )
+        }
+
+        const emailNorm = input.email.trim().toLowerCase()
+
+        // Get the client_id from the authorization request
+        const { clientId } = await server.requestManager.get(
+          requestUri,
+          deviceId,
+        )
+
+        // Rate limiting: per email (3/15min), per IP (10/15min), per client_id (20/15min)
+        checkOtpRateLimit(`email:${emailNorm}`, 3)
+        if (deviceMetadata.ipAddress) {
+          checkOtpRateLimit(`ip:${deviceMetadata.ipAddress}`, 10)
+        }
+        checkOtpRateLimit(`client:${clientId}`, 20)
+
+        await server.accountManager.requestOtp({
+          deviceId,
+          clientId,
+          emailNorm,
+          requestIp: deviceMetadata.ipAddress,
+          userAgent: deviceMetadata.userAgent ?? null,
+        })
+
+        // Always return empty 200
+        return { json: {} }
+      },
+    }),
+  )
+
   return router.buildMiddleware()
 
   async function authenticate(

@@ -183,6 +183,18 @@ export interface AccountStore {
    * @throws {HandleUnavailableError} - To indicate that the handle is already taken
    */
   verifyHandleAvailability(handle: string): Awaitable<void>
+
+  /**
+   * Generate and store an OTP code, then send a branded email if the account exists.
+   * Optional — if not implemented, OTP authentication is not supported.
+   */
+  requestOtp?(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    requestIp: string | null
+    userAgent: string | null
+  }): Awaitable<void>
 }
 
 export const isAccountStore = buildInterfaceChecker<AccountStore>([

@@ -55,6 +55,12 @@ import * as authRequestHelper from './helpers/authorization-request'
 import * as authorizedClientHelper from './helpers/authorized-client'
 import * as deviceHelper from './helpers/device'
 import * as lexiconHelper from './helpers/lexicon'
+import {
+  generateOtp,
+  getTrustedClient,
+  hashUserAgent,
+  insertOtpCode,
+} from './helpers/otp'
 import * as tokenHelper from './helpers/token'
 import * as usedRefreshTokenHelper from './helpers/used-refresh-token'
 
@@ -403,6 +409,46 @@ export class OAuthStore
       }
 
       throw err
+    }
+  }
+
+  async requestOtp(data: {
+    deviceId: string
+    clientId: string
+    emailNorm: string
+    requestIp: string | null
+    userAgent: string | null
+  }): Promise<void> {
+    const { code, salt, codeHash } = generateOtp()
+
+    await insertOtpCode(this.db, {
+      deviceId: data.deviceId,
+      clientId: data.clientId,
+      emailNorm: data.emailNorm,
+      codeHash,
+      salt,
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+      requestIp: data.requestIp,
+      uaHash: hashUserAgent(data.userAgent ?? undefined),
+    })
+
+    // Only send email if account exists (prevents enumeration)
+    const account = await accountHelper.getAccountByEmail(
+      this.db,
+      data.emailNorm,
+    )
+    if (account) {
+      const branding = await getTrustedClient(this.db, data.clientId)
+      await this.mailer.sendOtpCode(
+        {
+          code,
+          brandName: branding?.brandName ?? 'Your account',
+          brandColor: branding?.brandColor ?? '#333333',
+          logoUrl: branding?.logoUrl,
+          supportEmail: branding?.supportEmail,
+        },
+        { to: data.emailNorm },
+      )
     }
   }
 
