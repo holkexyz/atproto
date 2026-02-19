@@ -432,36 +432,48 @@ export class OAuthStore
     requestIp: string | null
     userAgent: string | null
   }): Promise<void> {
-    const { code, salt, codeHash } = generateOtp()
+    const minTime = 500 // milliseconds — enough to cover SMTP variance
+    const start = Date.now()
 
-    await insertOtpCode(this.db, {
-      deviceId: data.deviceId,
-      clientId: data.clientId,
-      emailNorm: data.emailNorm,
-      codeHash,
-      salt,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
-      requestIp: data.requestIp,
-      uaHash: hashUserAgent(data.userAgent ?? undefined),
-    })
+    try {
+      const { code, salt, codeHash } = generateOtp()
 
-    // Only send email if account exists (prevents enumeration)
-    const account = await accountHelper.getAccountByEmail(
-      this.db,
-      data.emailNorm,
-    )
-    if (account) {
-      const branding = await getTrustedClient(this.db, data.clientId)
-      await this.mailer.sendOtpCode(
-        {
-          code,
-          brandName: branding?.brandName ?? 'Your account',
-          brandColor: branding?.brandColor ?? '#333333',
-          logoUrl: branding?.logoUrl,
-          supportEmail: branding?.supportEmail,
-        },
-        { to: data.emailNorm },
+      await insertOtpCode(this.db, {
+        deviceId: data.deviceId,
+        clientId: data.clientId,
+        emailNorm: data.emailNorm,
+        codeHash,
+        salt,
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+        requestIp: data.requestIp,
+        uaHash: hashUserAgent(data.userAgent ?? undefined),
+      })
+
+      // Only send email if account exists (prevents enumeration)
+      const account = await accountHelper.getAccountByEmail(
+        this.db,
+        data.emailNorm,
       )
+      if (account) {
+        const branding = await getTrustedClient(this.db, data.clientId)
+        await this.mailer.sendOtpCode(
+          {
+            code,
+            brandName: branding?.brandName ?? 'Your account',
+            brandColor: branding?.brandColor ?? '#333333',
+            logoUrl: branding?.logoUrl,
+            supportEmail: branding?.supportEmail,
+          },
+          { to: data.emailNorm },
+        )
+      }
+    } finally {
+      // Ensure consistent response time regardless of account existence
+      // to prevent timing-based email enumeration attacks
+      const elapsed = Date.now() - start
+      if (elapsed < minTime) {
+        await new Promise((resolve) => setTimeout(resolve, minTime - elapsed))
+      }
     }
   }
 
