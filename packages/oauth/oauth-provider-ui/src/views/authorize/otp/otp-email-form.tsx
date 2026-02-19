@@ -17,6 +17,7 @@ export interface OtpEmailFormProps {
 export function OtpEmailForm({
   api,
   loginHint,
+  brandColor,
   onCodeSent,
   onSwitchToPassword,
 }: OtpEmailFormProps) {
@@ -33,6 +34,11 @@ export function OtpEmailForm({
       onSubmit={doSubmit}
       invalid={!email}
       submitLabel={<Trans>Send me a code</Trans>}
+      submitStyle={
+        brandColor
+          ? { backgroundColor: brandColor, borderColor: brandColor }
+          : undefined
+      }
       append={
         <div className="text-center text-sm text-slate-600 dark:text-slate-400">
           <Button type="button" onClick={onSwitchToPassword}>

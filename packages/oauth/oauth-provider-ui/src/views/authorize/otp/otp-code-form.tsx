@@ -24,6 +24,7 @@ export interface OtpCodeFormProps {
 export function OtpCodeForm({
   api,
   email,
+  brandColor,
   onVerified,
   onResend,
 }: OtpCodeFormProps) {
@@ -63,6 +64,11 @@ export function OtpCodeForm({
       onSubmit={doSubmit}
       invalid={code.length !== 6}
       submitLabel={<Trans>Verify</Trans>}
+      submitStyle={
+        brandColor
+          ? { backgroundColor: brandColor, borderColor: brandColor }
+          : undefined
+      }
       append={
         <div className="text-center text-sm text-slate-600 dark:text-slate-400">
           {cooldown > 0 ? (

@@ -169,6 +169,7 @@ export function AuthorizeView({
       <SignInView
         {...props}
         loginHint={authorizeData.loginHint}
+        brandColor={authorizeData.clientBrandColor}
         sessions={sessions}
         selectSub={selectSub}
         onSignIn={doSignIn}
