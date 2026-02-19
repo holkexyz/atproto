@@ -5,7 +5,9 @@ import {
   LayoutTitlePage,
   LayoutTitlePageProps,
 } from '../../../components/layouts/layout-title-page.tsx'
+import { Account, Api } from '../../../lib/api.ts'
 import { Override } from '../../../lib/util.ts'
+import { OtpSignInView } from '../otp/otp-sign-in-view.tsx'
 import { SignInForm, SignInFormOutput } from './sign-in-form.tsx'
 import { SignInPicker } from './sign-in-picker.tsx'
 
@@ -20,6 +22,11 @@ export type SignInViewProps = Override<
       credentials: SignInFormOutput,
       signal: AbortSignal,
     ) => void | PromiseLike<void>
+    onAuthenticated?: (result: {
+      account: Account
+      ephemeralToken?: string
+      consentRequired?: boolean
+    }) => void
     onSignUp?: () => void
     onForgotPassword?: (emailHint?: string) => void
     onBack?: () => void
@@ -33,6 +40,7 @@ export function SignInView({
   selectSub,
 
   onSignIn,
+  onAuthenticated,
   onSignUp,
   onForgotPassword,
   onBack,
@@ -48,6 +56,14 @@ export function SignInView({
   const clearSession = useCallback(() => selectSub(null), [selectSub])
   const accounts = useMemo(() => sessions.map((s) => s.account), [sessions])
   const [showSignInForm, setShowSignInForm] = useState(sessions.length === 0)
+
+  // Create a local Api instance for OTP calls
+  const [api] = useState(() => new Api())
+
+  // Default to OTP mode when onAuthenticated is provided; otherwise fall back to password
+  const [mode, setMode] = useState<'otp' | 'password'>(
+    onAuthenticated ? 'otp' : 'password',
+  )
 
   title ??= t({ message: 'Sign in', context: 'noun' })
 
@@ -82,6 +98,24 @@ export function SignInView({
     )
   }
 
+  // OTP mode: show OTP sign-in view (primary flow when onAuthenticated is provided)
+  if (onAuthenticated && mode === 'otp') {
+    return (
+      <LayoutTitlePage
+        {...props}
+        title={title}
+        subtitle={subtitle ?? <Trans>Enter your email to sign in</Trans>}
+      >
+        <OtpSignInView
+          api={api}
+          loginHint={loginHint}
+          onAuthenticated={onAuthenticated}
+          onSwitchToPassword={() => setMode('password')}
+        />
+      </LayoutTitlePage>
+    )
+  }
+
   if (loginHint) {
     return (
       <LayoutTitlePage
@@ -96,7 +130,19 @@ export function SignInView({
           backLabel={backLabel}
           usernameDefault={loginHint}
           usernameReadonly={true}
-        />
+        >
+          {onAuthenticated && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={() => setMode('otp')}
+              >
+                <Trans>Sign in with email code instead</Trans>
+              </button>
+            </div>
+          )}
+        </SignInForm>
       </LayoutTitlePage>
     )
   }
@@ -113,7 +159,19 @@ export function SignInView({
           onForgotPassword={onForgotPassword}
           onBack={onBack}
           backLabel={backLabel}
-        />
+        >
+          {onAuthenticated && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={() => setMode('otp')}
+              >
+                <Trans>Sign in with email code instead</Trans>
+              </button>
+            </div>
+          )}
+        </SignInForm>
       </LayoutTitlePage>
     )
   }
@@ -129,7 +187,19 @@ export function SignInView({
           onSubmit={onSignIn}
           onForgotPassword={onForgotPassword}
           onBack={() => setShowSignInForm(false)}
-        />
+        >
+          {onAuthenticated && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={() => setMode('otp')}
+              >
+                <Trans>Sign in with email code instead</Trans>
+              </button>
+            </div>
+          )}
+        </SignInForm>
       </LayoutTitlePage>
     )
   }

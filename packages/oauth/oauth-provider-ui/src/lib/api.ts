@@ -4,6 +4,7 @@ import {
   CSRF_COOKIE_NAME,
   CSRF_HEADER_NAME,
 } from '@atproto/oauth-provider-api'
+import type { Account } from '@atproto/oauth-provider-api'
 import { readCookie } from './cookies.ts'
 import {
   JsonClient,
@@ -11,14 +12,35 @@ import {
   JsonErrorResponse,
 } from './json-client.ts'
 
+export type { Account }
+
 export type { Options } from './json-client.ts'
 
 export class Api extends JsonClient<ApiEndpoints> {
+  public locale: string = navigator.language || 'en'
+
   constructor() {
     const baseUrl = new URL(API_ENDPOINT_PREFIX, window.origin).toString()
     super(baseUrl, () => ({
       [CSRF_HEADER_NAME]: readCookie(CSRF_COOKIE_NAME),
     }))
+  }
+
+  async doOtpRequest(email: string): Promise<void> {
+    await this.fetch('POST', '/otp-request', { email })
+  }
+
+  async doOtpVerify(
+    email: string,
+    code: string,
+  ): Promise<{
+    account: Account
+    ephemeralToken?: string
+    consentRequired?: boolean
+    accountCreated?: boolean
+  }> {
+    const result = await this.fetch('POST', '/otp-verify', { email, code })
+    return result as any // Type assertion — the endpoint types are defined in oauth-provider-api
   }
 
   // Override the parent's parseError method to handle expected error responses
