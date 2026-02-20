@@ -48,12 +48,14 @@ COPY ./packages/ws-client ./packages/ws-client
 COPY ./packages/xrpc-server ./packages/xrpc-server
 COPY ./packages/xrpc ./packages/xrpc
 
-# install all deps
-RUN PUPPETEER_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile
+# install all deps with pnpm store cache
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
+    PUPPETEER_SKIP_DOWNLOAD=true pnpm install --frozen-lockfile
 # build all packages with external node_modules
 RUN pnpm run --recursive --stream --filter '@atproto/pds...' build
 # install only prod deps, hoisted to root node_modules dir
-RUN pnpm install --prod --shamefully-hoist --frozen-lockfile --prefer-offline --config.confirmModulesPurge=false
+RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
+    pnpm install --prod --shamefully-hoist --frozen-lockfile --prefer-offline --config.confirmModulesPurge=false
 
 WORKDIR services/pds
 
@@ -80,6 +82,6 @@ ENV UV_USE_IO_URING=0
 USER node
 CMD ["node", "--heapsnapshot-signal=SIGUSR2", "--enable-source-maps", "--require=./tracer.js", "index.js"]
 
-LABEL org.opencontainers.image.source=https://github.com/bluesky-social/atproto
-LABEL org.opencontainers.image.description="ATP Personal Data Server (PDS)"
+LABEL org.opencontainers.image.source=https://github.com/holkexyz/atproto
+LABEL org.opencontainers.image.description="ATP Personal Data Server (PDS) - OTP fork"
 LABEL org.opencontainers.image.licenses=MIT
