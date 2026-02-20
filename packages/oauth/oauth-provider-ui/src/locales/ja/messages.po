@@ -17,8 +17,8 @@ msgstr ""
 msgid "2FA Confirmation"
 msgstr "２要素認証の確認"
 
-#: src/views/authorize/otp/otp-code-form.tsx:92
-#: src/views/authorize/otp/otp-code-form.tsx:107
+#: src/views/authorize/otp/otp-code-form.tsx:95
+#: src/views/authorize/otp/otp-code-form.tsx:110
 msgid "6-digit code"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "呼び出し"
 
-#: src/views/authorize/authorize-view.tsx:181
+#: src/views/authorize/authorize-view.tsx:180
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -139,8 +139,8 @@ msgid "Check your {0} email for a login code and enter it here."
 msgstr "確認コードが記載されたメール {0} を確認し、ここに入力してください。"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:99
-msgid "Choose a username"
-msgstr "ユーザー名を選んでください"
+#~ msgid "Choose a username"
+#~ msgstr "ユーザー名を選んでください"
 
 #: src/components/utils/error-card.tsx:76
 msgid "Code"
@@ -185,8 +185,8 @@ msgid "Create a new account"
 msgstr "新規アカウントの作成"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:82
-msgid "Create Account"
-msgstr "アカウントを作成"
+#~ msgid "Create Account"
+#~ msgstr "アカウントを作成"
 
 #: src/components/utils/scope-description.tsx:596
 msgid "Create, update, and delete any public record"
@@ -204,18 +204,19 @@ msgstr "拒否する"
 msgid "Description"
 msgstr "説明"
 
-#: src/views/authorize/otp/otp-code-form.tsx:82
+#: src/views/authorize/otp/otp-code-form.tsx:85
 msgid "Didn't get it? Resend"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:114
+#: src/views/authorize/sign-up/sign-up-view.tsx:135
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
 msgstr "メールアドレス"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:50
+#: src/views/authorize/otp/otp-email-form.tsx:57
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "メールアドレス"
@@ -235,6 +236,10 @@ msgstr "アカウントの作成に使用したメールアドレスを入力し
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:58
 msgid "Enter your email address"
 msgstr "メールアドレスを入力してください"
+
+#: src/views/authorize/sign-up/sign-up-view.tsx:106
+msgid "Enter your email to get started"
+msgstr ""
 
 #: src/views/authorize/sign-in/sign-in-view.tsx:108
 msgid "Enter your email to sign in"
@@ -257,7 +262,8 @@ msgstr "ユーザー名とパスワードを入力してください"
 msgid "Error"
 msgstr "エラー"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:102
+#: src/views/authorize/sign-up/sign-up-view.tsx:124
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "example-com-xxxxx-xxxxx"
 
@@ -312,8 +318,10 @@ msgstr "言語選択"
 msgid "Invalid"
 msgstr "無効"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:96
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:101
+#: src/views/authorize/sign-up/sign-up-view.tsx:118
+#: src/views/authorize/sign-up/sign-up-view.tsx:123
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:95
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
 msgstr "招待コード"
 
@@ -326,7 +334,7 @@ msgstr ""
 msgid "Let's get your password reset!"
 msgstr "パスワードをリセットしましょう！"
 
-#: src/views/authorize/authorize-view.tsx:220
+#: src/views/authorize/authorize-view.tsx:219
 msgid "Login complete"
 msgstr "ログイン完了"
 
@@ -388,7 +396,7 @@ msgstr "OK"
 msgid "Only letters, numbers, and hyphens"
 msgstr "英数字とハイフンのみ"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:128
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:127
 #: src/views/authorize/sign-in/sign-in-form.tsx:170
 #: src/components/forms/input-password.tsx:53
 msgid "Password"
@@ -458,7 +466,7 @@ msgstr "このアカウントをこのデバイスに記憶する"
 msgid "Repository"
 msgstr "リポジトリ"
 
-#: src/views/authorize/otp/otp-code-form.tsx:75
+#: src/views/authorize/otp/otp-code-form.tsx:78
 msgid "Resend available in {cooldown}s"
 msgstr ""
 
@@ -482,11 +490,11 @@ msgstr "ドメインを選択"
 msgid "Select from an existing account"
 msgstr "既存のアカウントから選択"
 
-#: src/views/authorize/otp/otp-email-form.tsx:36
+#: src/views/authorize/otp/otp-email-form.tsx:43
 msgid "Send me a code"
 msgstr ""
 
-#: src/views/authorize/otp/otp-code-form.tsx:89
+#: src/views/authorize/otp/otp-code-form.tsx:92
 msgid "Sent to {email}"
 msgstr ""
 
@@ -516,11 +524,12 @@ msgstr "アカウントの選択"
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/otp/otp-email-form.tsx:45
+#: src/views/authorize/otp/otp-email-form.tsx:52
 msgid "Sign in with password"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:88
+#: src/views/authorize/sign-up/sign-up-view.tsx:105
+#: src/views/authorize/sign-up/sign-up-view.tsx:114
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "サインアップ"
@@ -650,13 +659,13 @@ msgstr "ユーザー名またはメールアドレス"
 msgid "Valid"
 msgstr "有効"
 
-#: src/views/authorize/otp/otp-code-form.tsx:66
+#: src/views/authorize/otp/otp-code-form.tsx:69
 msgid "Verify"
 msgstr ""
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:140
-msgid "Verify you are human"
-msgstr "あなたが人間であることを確認"
+#~ msgid "Verify you are human"
+#~ msgstr "あなたが人間であることを確認"
 
 #: src/views/authorize/consent/consent-form.tsx:136
 msgid "wants to access your <0/> account"
@@ -671,8 +680,8 @@ msgid "Warning"
 msgstr "警告"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:84
-msgid "We're so excited to have you join us!"
-msgstr "私たちはあなたが参加してくれることをとても楽しみにしています！"
+#~ msgid "We're so excited to have you join us!"
+#~ msgstr "私たちはあなたが参加してくれることをとても楽しみにしています！"
 
 #: src/components/utils/password-strength-label.tsx:31
 msgid "Weak"
@@ -682,7 +691,7 @@ msgstr "弱い"
 msgid "Wrong identifier or password"
 msgstr "識別子またはパスワードが間違っています"
 
-#: src/views/authorize/authorize-view.tsx:221
+#: src/views/authorize/authorize-view.tsx:220
 msgid "You are being redirected..."
 msgstr "リダイレクトしています…"
 
@@ -699,8 +708,8 @@ msgid "You will receive an email with a \"reset code\". Enter that code here the
 msgstr "「リセットコード」が記載されたメールが届きます。ここにコードを入力し、新しいパスワードを入力します。"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:121
-msgid "Your account"
-msgstr "あなたのアカウント"
+#~ msgid "Your account"
+#~ msgstr "あなたのアカウント"
 
 #. placeholder {0}: segment.length ? ( <strong className="text-gray-800 dark:text-gray-200"> {preview} </strong> ) : ( <span aria-hidden className="w-24 rounded-md bg-gray-300 p-2 dark:bg-slate-600" /> )
 #: src/views/authorize/sign-up/sign-up-handle-form.tsx:230

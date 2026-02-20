@@ -17,8 +17,8 @@ msgstr ""
 msgid "2FA Confirmation"
 msgstr "Confirmation 2FA"
 
-#: src/views/authorize/otp/otp-code-form.tsx:92
-#: src/views/authorize/otp/otp-code-form.tsx:107
+#: src/views/authorize/otp/otp-code-form.tsx:95
+#: src/views/authorize/otp/otp-code-form.tsx:110
 msgid "6-digit code"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "Appeler"
 
-#: src/views/authorize/authorize-view.tsx:181
+#: src/views/authorize/authorize-view.tsx:180
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -139,8 +139,8 @@ msgid "Check your {0} email for a login code and enter it here."
 msgstr "Vérifiez vos emails {0} pour un code de connexion et saisissez-le ici."
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:99
-msgid "Choose a username"
-msgstr "Choisissez un nom d'utilisateur"
+#~ msgid "Choose a username"
+#~ msgstr "Choisissez un nom d'utilisateur"
 
 #: src/components/utils/error-card.tsx:76
 msgid "Code"
@@ -185,8 +185,8 @@ msgid "Create a new account"
 msgstr "Créer un nouveau compte"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:82
-msgid "Create Account"
-msgstr "Créer un compte"
+#~ msgid "Create Account"
+#~ msgstr "Créer un compte"
 
 #: src/components/utils/scope-description.tsx:596
 msgid "Create, update, and delete any public record"
@@ -204,18 +204,19 @@ msgstr "Refuser l'accès"
 msgid "Description"
 msgstr "Description"
 
-#: src/views/authorize/otp/otp-code-form.tsx:82
+#: src/views/authorize/otp/otp-code-form.tsx:85
 msgid "Didn't get it? Resend"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:114
+#: src/views/authorize/sign-up/sign-up-view.tsx:135
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
 msgstr "Email"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:50
+#: src/views/authorize/otp/otp-email-form.tsx:57
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "Adresse email"
@@ -235,6 +236,10 @@ msgstr "Saisissez l'email que vous avez utilisé pour créer votre compte. Nous 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:58
 msgid "Enter your email address"
 msgstr "Saisissez votre adresse email"
+
+#: src/views/authorize/sign-up/sign-up-view.tsx:106
+msgid "Enter your email to get started"
+msgstr ""
 
 #: src/views/authorize/sign-in/sign-in-view.tsx:108
 msgid "Enter your email to sign in"
@@ -257,7 +262,8 @@ msgstr "Saisissez votre nom d'utilisateur et votre mot de passe"
 msgid "Error"
 msgstr "Erreur"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:102
+#: src/views/authorize/sign-up/sign-up-view.tsx:124
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "exemple-com-xxxxx-xxxxx"
 
@@ -312,8 +318,10 @@ msgstr "Sélecteur de langue"
 msgid "Invalid"
 msgstr "Invalide"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:96
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:101
+#: src/views/authorize/sign-up/sign-up-view.tsx:118
+#: src/views/authorize/sign-up/sign-up-view.tsx:123
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:95
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
 msgstr "Code d'invitation"
 
@@ -326,7 +334,7 @@ msgstr "Il semble que votre navigateur n'accepte pas les cookies. Appuyez sur \"
 msgid "Let's get your password reset!"
 msgstr "Réinitialisons votre mot de passe !"
 
-#: src/views/authorize/authorize-view.tsx:220
+#: src/views/authorize/authorize-view.tsx:219
 msgid "Login complete"
 msgstr "Connexion terminée"
 
@@ -388,7 +396,7 @@ msgstr "OK"
 msgid "Only letters, numbers, and hyphens"
 msgstr "Uniquement des lettres, des chiffres et des traits d'union"
 
-#: src/views/authorize/sign-up/sign-up-account-form.tsx:128
+#: src/views/authorize/sign-up/sign-up-account-form.tsx:127
 #: src/views/authorize/sign-in/sign-in-form.tsx:170
 #: src/components/forms/input-password.tsx:53
 msgid "Password"
@@ -458,7 +466,7 @@ msgstr "Se souvenir de ce compte sur cet appareil"
 msgid "Repository"
 msgstr "Données publiques"
 
-#: src/views/authorize/otp/otp-code-form.tsx:75
+#: src/views/authorize/otp/otp-code-form.tsx:78
 msgid "Resend available in {cooldown}s"
 msgstr ""
 
@@ -482,11 +490,11 @@ msgstr "Sélectionner le domaine"
 msgid "Select from an existing account"
 msgstr "Sélectionner un compte"
 
-#: src/views/authorize/otp/otp-email-form.tsx:36
+#: src/views/authorize/otp/otp-email-form.tsx:43
 msgid "Send me a code"
 msgstr ""
 
-#: src/views/authorize/otp/otp-code-form.tsx:89
+#: src/views/authorize/otp/otp-code-form.tsx:92
 msgid "Sent to {email}"
 msgstr ""
 
@@ -516,11 +524,12 @@ msgstr "Se connecter en tant que..."
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/otp/otp-email-form.tsx:45
+#: src/views/authorize/otp/otp-email-form.tsx:52
 msgid "Sign in with password"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:88
+#: src/views/authorize/sign-up/sign-up-view.tsx:105
+#: src/views/authorize/sign-up/sign-up-view.tsx:114
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "S'inscrire"
@@ -650,13 +659,13 @@ msgstr "Nom d'utilisateur ou adresse email"
 msgid "Valid"
 msgstr "Valide"
 
-#: src/views/authorize/otp/otp-code-form.tsx:66
+#: src/views/authorize/otp/otp-code-form.tsx:69
 msgid "Verify"
 msgstr ""
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:140
-msgid "Verify you are human"
-msgstr "Vérifiez que vous êtes humain"
+#~ msgid "Verify you are human"
+#~ msgstr "Vérifiez que vous êtes humain"
 
 #: src/views/authorize/consent/consent-form.tsx:136
 msgid "wants to access your <0/> account"
@@ -671,8 +680,8 @@ msgid "Warning"
 msgstr "Avertissement"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:84
-msgid "We're so excited to have you join us!"
-msgstr "Nous sommes ravis de vous accueillir parmi nous !"
+#~ msgid "We're so excited to have you join us!"
+#~ msgstr "Nous sommes ravis de vous accueillir parmi nous !"
 
 #: src/components/utils/password-strength-label.tsx:31
 msgid "Weak"
@@ -682,7 +691,7 @@ msgstr "Faible"
 msgid "Wrong identifier or password"
 msgstr "Identifiant ou mot de passe incorrect"
 
-#: src/views/authorize/authorize-view.tsx:221
+#: src/views/authorize/authorize-view.tsx:220
 msgid "You are being redirected..."
 msgstr "Vous êtes redirigé..."
 
@@ -699,8 +708,8 @@ msgid "You will receive an email with a \"reset code\". Enter that code here the
 msgstr "Vous aver reçu un email avec un \"code de réinitialisation\". Saisissez ce code ici puis entrez votre nouveau mot de passe."
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:121
-msgid "Your account"
-msgstr "Votre compte"
+#~ msgid "Your account"
+#~ msgstr "Votre compte"
 
 #. placeholder {0}: segment.length ? ( <strong className="text-gray-800 dark:text-gray-200"> {preview} </strong> ) : ( <span aria-hidden className="w-24 rounded-md bg-gray-300 p-2 dark:bg-slate-600" /> )
 #: src/views/authorize/sign-up/sign-up-handle-form.tsx:230
