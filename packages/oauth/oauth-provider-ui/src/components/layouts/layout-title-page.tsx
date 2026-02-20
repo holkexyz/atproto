@@ -2,7 +2,6 @@ import { clsx } from 'clsx'
 import { JSX, ReactNode } from 'react'
 import type { CustomizationData } from '@atproto/oauth-provider-api'
 import { Override } from '../../lib/util.ts'
-import { LocaleSelector } from '../../locales/locale-selector.tsx'
 
 export type LayoutTitlePageProps = Override<
   JSX.IntrinsicElements['div'],
@@ -70,11 +69,11 @@ export function LayoutTitlePage({
             </p>
           )}
         </div>
-
-        <LocaleSelector key="localeSelector" className="m-1 md:m-2" />
       </div>
 
-      <main className="w-full p-6 md:max-w-3xl md:px-12">{children}</main>
+      <main className="flex w-full grow flex-col items-center justify-center p-6 md:max-w-3xl md:px-12">
+        <div className="w-full">{children}</div>
+      </main>
     </div>
   )
 }
