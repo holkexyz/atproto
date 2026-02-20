@@ -20,6 +20,7 @@ export type SignUpViewProps = Override<
   LayoutTitlePageProps,
   {
     customizationData?: CustomizationData
+    brandColor?: string
 
     onBack?: () => void
     backLabel?: ReactNode
@@ -40,6 +41,7 @@ export function SignUpView({
     inviteCodeRequired = true,
     links,
   } = {},
+  brandColor,
 
   onDone,
   onBack,
@@ -110,6 +112,11 @@ export function SignUpView({
         invalid={!isValid}
         onSubmit={doSubmit}
         submitLabel={<Trans>Sign up</Trans>}
+        submitStyle={
+          brandColor
+            ? { backgroundColor: brandColor, borderColor: brandColor }
+            : undefined
+        }
         append={<SignUpDisclaimer links={links} />}
       >
         {inviteCodeRequired && (

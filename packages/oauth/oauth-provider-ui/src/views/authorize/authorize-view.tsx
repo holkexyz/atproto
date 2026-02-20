@@ -148,6 +148,7 @@ export function AuthorizeView({
       <SignUpView
         {...props}
         customizationData={customizationData}
+        brandColor={authorizeData.clientBrandColor}
         onBack={showHome}
         onDone={doSignUp}
       />
