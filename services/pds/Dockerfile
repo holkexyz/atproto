@@ -12,6 +12,7 @@ RUN corepack prepare --activate
 COPY ./*.* ./
 COPY ./tsconfig ./tsconfig
 COPY ./lexicons ./lexicons
+COPY ./services ./services
 COPY ./packages/internal ./packages/internal
 COPY ./packages/lex ./packages/lex
 
