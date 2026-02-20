@@ -223,3 +223,21 @@
 
   --space-screen: 100vh;
 }
+
+/* Override browser autofill background to match input container */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgb(243 244 246) inset; /* gray-100 */
+  -webkit-text-fill-color: rgb(71 85 105); /* slate-600 */
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+@media (prefers-color-scheme: dark) {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px rgb(31 41 55) inset; /* gray-800 */
+    -webkit-text-fill-color: rgb(203 213 225); /* slate-300 */
+  }
+}
