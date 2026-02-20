@@ -70,6 +70,10 @@ export function createAuthorizationPageMiddleware<
     server.customization,
     securityOptions,
   )
+  const sendAuthorizeErrorPage = sendErrorPageFactory(
+    server.customization,
+    authorizeSecurityOptions,
+  )
   const sendCookieErrorPage = sendCookieErrorPageFactory(
     server.customization,
     securityOptions,
@@ -79,7 +83,7 @@ export function createAuthorizationPageMiddleware<
 
   router.get(
     '/oauth/authorize',
-    withErrorHandler(async function (req, res) {
+    withErrorHandler(sendAuthorizeErrorPage, async function (req, res) {
       res.setHeader('Cache-Control', 'no-store')
       res.setHeader('Pragma', 'no-cache')
 
@@ -226,7 +230,7 @@ export function createAuthorizationPageMiddleware<
   // implement it here to avoid duplicating the logic.
   router.get(
     '/oauth/authorize/redirect',
-    withErrorHandler(async function (req, res) {
+    withErrorHandler(sendErrorPage, async function (req, res) {
       // Ensure we come from the authorization page
       validateFetchSite(req, ['same-origin'])
       validateFetchMode(req, ['navigate'])
@@ -248,6 +252,7 @@ export function createAuthorizationPageMiddleware<
   return router.buildMiddleware()
 
   function withErrorHandler<T extends RouterCtx>(
+    errorPageSender: typeof sendErrorPage,
     handler: (this: T, req: Req, res: Res) => Awaitable<void>,
   ): Middleware<T, Req, Res> {
     return async function (req, res) {
@@ -268,7 +273,7 @@ export function createAuthorizationPageMiddleware<
               securityOptions,
             )
           } else {
-            return sendErrorPage(req, res, err)
+            return errorPageSender(req, res, err)
           }
         } else if (!res.destroyed) {
           res.end()
