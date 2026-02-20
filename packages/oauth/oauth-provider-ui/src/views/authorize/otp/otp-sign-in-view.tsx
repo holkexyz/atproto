@@ -12,6 +12,7 @@ export interface OtpSignInViewProps {
     account: Account
     ephemeralToken?: string
     consentRequired?: boolean
+    remember?: boolean
   }) => void
   onSwitchToPassword: () => void
 }
@@ -52,6 +53,7 @@ export function OtpSignInView(props: OtpSignInViewProps) {
       brandColor={props.brandColor}
       onVerified={props.onAuthenticated}
       onResend={handleResend}
+      onBack={() => setStep('email')}
     />
   )
 }

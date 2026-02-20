@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
-import { Button } from '../../../components/forms/button.tsx'
 import { Fieldset } from '../../../components/forms/fieldset.tsx'
 import { FormCardAsync } from '../../../components/forms/form-card-async.tsx'
 import { InputEmailAddress } from '../../../components/forms/input-email-address.tsx'
@@ -40,17 +39,21 @@ export function OtpEmailForm({
     <FormCardAsync
       onSubmit={doSubmit}
       invalid={!email}
-      submitLabel={<Trans>Send me a code</Trans>}
+      submitLabel={<Trans>Continue</Trans>}
       submitStyle={
         brandColor
           ? { backgroundColor: brandColor, borderColor: brandColor }
           : undefined
       }
       append={
-        <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-          <Button type="button" onClick={onSwitchToPassword}>
+        <div className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+          <button
+            type="button"
+            className="underline hover:no-underline"
+            onClick={onSwitchToPassword}
+          >
             <Trans>Sign in with password</Trans>
-          </Button>
+          </button>
         </div>
       }
     >
