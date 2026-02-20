@@ -141,14 +141,15 @@ export function SignInView({
         title={title}
         subtitle={subtitle ?? <Trans>Enter your password</Trans>}
       >
-        <SignInForm
-          onSubmit={onSignIn}
-          onForgotPassword={onForgotPassword}
-          usernameDefault={loginHint}
-          usernameReadonly={true}
-        >
+        <>
+          <SignInForm
+            onSubmit={onSignIn}
+            onForgotPassword={onForgotPassword}
+            usernameDefault={loginHint}
+            usernameReadonly={true}
+          />
           {onAuthenticated && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
               <button
                 type="button"
                 className="underline hover:no-underline"
@@ -158,7 +159,7 @@ export function SignInView({
               </button>
             </div>
           )}
-          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+          <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
             <button
               type="button"
               className="underline hover:no-underline"
@@ -167,7 +168,7 @@ export function SignInView({
               <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
-        </SignInForm>
+        </>
       </LayoutTitlePage>
     )
   }
@@ -179,9 +180,10 @@ export function SignInView({
         title={title}
         subtitle={subtitle ?? <Trans>Enter your username and password</Trans>}
       >
-        <SignInForm onSubmit={onSignIn} onForgotPassword={onForgotPassword}>
+        <>
+          <SignInForm onSubmit={onSignIn} onForgotPassword={onForgotPassword} />
           {onAuthenticated && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
               <button
                 type="button"
                 className="underline hover:no-underline"
@@ -191,7 +193,7 @@ export function SignInView({
               </button>
             </div>
           )}
-          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+          <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
             <button
               type="button"
               className="underline hover:no-underline"
@@ -200,7 +202,7 @@ export function SignInView({
               <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
-        </SignInForm>
+        </>
       </LayoutTitlePage>
     )
   }
@@ -212,13 +214,14 @@ export function SignInView({
         title={title}
         subtitle={subtitle ?? <Trans>Enter your username and password</Trans>}
       >
-        <SignInForm
-          onSubmit={onSignIn}
-          onForgotPassword={onForgotPassword}
-          onBack={() => setShowSignInForm(false)}
-        >
+        <>
+          <SignInForm
+            onSubmit={onSignIn}
+            onForgotPassword={onForgotPassword}
+            onBack={() => setShowSignInForm(false)}
+          />
           {onAuthenticated && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
               <button
                 type="button"
                 className="underline hover:no-underline"
@@ -228,7 +231,7 @@ export function SignInView({
               </button>
             </div>
           )}
-          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+          <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
             <button
               type="button"
               className="underline hover:no-underline"
@@ -237,7 +240,7 @@ export function SignInView({
               <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
-        </SignInForm>
+        </>
       </LayoutTitlePage>
     )
   }
