@@ -73,6 +73,7 @@ export function createAuthorizationPageMiddleware<
   const sendAuthorizeErrorPage = sendErrorPageFactory(
     server.customization,
     authorizeSecurityOptions,
+    frameAncestors,
   )
   const sendCookieErrorPage = sendCookieErrorPageFactory(
     server.customization,
