@@ -11,7 +11,6 @@ export interface OtpEmailFormProps {
   loginHint?: string
   brandColor?: string
   onCodeSent: (email: string) => void
-  onSwitchToPassword: () => void
   onSwitchToExternalProvider: () => void
 }
 
@@ -20,7 +19,6 @@ export function OtpEmailForm({
   loginHint,
   brandColor,
   onCodeSent,
-  onSwitchToPassword,
   onSwitchToExternalProvider,
 }: OtpEmailFormProps) {
   const [email, setEmail] = useState<string | undefined>(loginHint)
@@ -65,18 +63,9 @@ export function OtpEmailForm({
         <button
           type="button"
           className="underline hover:no-underline"
-          onClick={onSwitchToPassword}
-        >
-          <Trans>Sign in with password</Trans>
-        </button>
-      </div>
-      <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
-        <button
-          type="button"
-          className="underline hover:no-underline"
           onClick={onSwitchToExternalProvider}
         >
-          <Trans>Sign in with another provider</Trans>
+          <Trans>Sign in with ATProto/Bluesky</Trans>
         </button>
       </div>
     </>

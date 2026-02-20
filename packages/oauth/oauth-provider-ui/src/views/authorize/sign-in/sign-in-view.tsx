@@ -128,7 +128,6 @@ export function SignInView({
           loginHint={loginHint}
           brandColor={brandColor}
           onAuthenticated={onAuthenticated}
-          onSwitchToPassword={() => setMode('password')}
           onSwitchToExternalProvider={() => setMode('external-provider')}
         />
       </LayoutTitlePage>
@@ -165,7 +164,7 @@ export function SignInView({
               className="underline hover:no-underline"
               onClick={() => setMode('external-provider')}
             >
-              <Trans>Sign in with another provider</Trans>
+              <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
         </SignInForm>
@@ -198,7 +197,7 @@ export function SignInView({
               className="underline hover:no-underline"
               onClick={() => setMode('external-provider')}
             >
-              <Trans>Sign in with another provider</Trans>
+              <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
         </SignInForm>
@@ -235,7 +234,7 @@ export function SignInView({
               className="underline hover:no-underline"
               onClick={() => setMode('external-provider')}
             >
-              <Trans>Sign in with another provider</Trans>
+              <Trans>Sign in with ATProto/Bluesky</Trans>
             </button>
           </div>
         </SignInForm>

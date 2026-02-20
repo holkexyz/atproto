@@ -14,7 +14,6 @@ export interface OtpSignInViewProps {
     consentRequired?: boolean
     remember?: boolean
   }) => void
-  onSwitchToPassword: () => void
   onSwitchToExternalProvider: () => void
 }
 
@@ -42,7 +41,6 @@ export function OtpSignInView(props: OtpSignInViewProps) {
           setEmail(sentEmail)
           setStep('code')
         }}
-        onSwitchToPassword={props.onSwitchToPassword}
         onSwitchToExternalProvider={props.onSwitchToExternalProvider}
       />
     )

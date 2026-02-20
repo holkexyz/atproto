@@ -167,7 +167,7 @@ msgid "Confirmation code"
 msgstr ""
 
 #: src/views/error/cookie-error-view.tsx:34
-#: src/views/authorize/otp/otp-email-form.tsx:45
+#: src/views/authorize/otp/otp-email-form.tsx:43
 #: src/views/authorize/external-provider/external-provider-form.tsx:39
 msgid "Continue"
 msgstr ""
@@ -216,7 +216,7 @@ msgstr ""
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:52
+#: src/views/authorize/otp/otp-email-form.tsx:50
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr ""
@@ -253,12 +253,12 @@ msgstr ""
 msgid "Enter your new password"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:143
+#: src/views/authorize/sign-in/sign-in-view.tsx:142
 msgid "Enter your password"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:181
-#: src/views/authorize/sign-in/sign-in-view.tsx:214
+#: src/views/authorize/sign-in/sign-in-view.tsx:180
+#: src/views/authorize/sign-in/sign-in-view.tsx:213
 msgid "Enter your username and password"
 msgstr ""
 
@@ -492,7 +492,7 @@ msgstr ""
 msgid "Select domain"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:250
+#: src/views/authorize/sign-in/sign-in-view.tsx:249
 msgid "Select from an existing account"
 msgstr ""
 
@@ -520,21 +520,17 @@ msgstr ""
 msgid "Sign in as..."
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:168
-#: src/views/authorize/sign-in/sign-in-view.tsx:201
-#: src/views/authorize/sign-in/sign-in-view.tsx:238
-#: src/views/authorize/otp/otp-email-form.tsx:79
-msgid "Sign in with another provider"
+#: src/views/authorize/sign-in/sign-in-view.tsx:167
+#: src/views/authorize/sign-in/sign-in-view.tsx:200
+#: src/views/authorize/sign-in/sign-in-view.tsx:237
+#: src/views/authorize/otp/otp-email-form.tsx:68
+msgid "Sign in with ATProto/Bluesky"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:158
-#: src/views/authorize/sign-in/sign-in-view.tsx:191
-#: src/views/authorize/sign-in/sign-in-view.tsx:228
+#: src/views/authorize/sign-in/sign-in-view.tsx:157
+#: src/views/authorize/sign-in/sign-in-view.tsx:190
+#: src/views/authorize/sign-in/sign-in-view.tsx:227
 msgid "Sign in with email code instead"
-msgstr ""
-
-#: src/views/authorize/otp/otp-email-form.tsx:70
-msgid "Sign in with password"
 msgstr ""
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:107
