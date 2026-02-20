@@ -54,6 +54,9 @@ export function OtpCodeForm({
     try {
       await onResend()
       setCooldown(RESEND_COOLDOWN_SECONDS)
+    } catch (error) {
+      // Let UnknownRequestUriError propagate to parent's error boundary
+      throw error
     } finally {
       setResending(false)
     }

@@ -1,10 +1,11 @@
 import { Trans } from '@lingui/react/macro'
 import { useState } from 'react'
+import { useErrorBoundary } from 'react-error-boundary'
 import { Button } from '../../../components/forms/button.tsx'
 import { Fieldset } from '../../../components/forms/fieldset.tsx'
 import { FormCardAsync } from '../../../components/forms/form-card-async.tsx'
 import { InputEmailAddress } from '../../../components/forms/input-email-address.tsx'
-import { Api } from '../../../lib/api.ts'
+import { Api, UnknownRequestUriError } from '../../../lib/api.ts'
 
 export interface OtpEmailFormProps {
   api: Api
@@ -22,11 +23,17 @@ export function OtpEmailForm({
   onSwitchToPassword,
 }: OtpEmailFormProps) {
   const [email, setEmail] = useState<string | undefined>(loginHint)
+  const { showBoundary } = useErrorBoundary<UnknownRequestUriError>()
 
   const doSubmit = async (signal: AbortSignal) => {
     if (!email) return
-    await api.doOtpRequest(email)
-    onCodeSent(email)
+    try {
+      await api.doOtpRequest(email)
+      onCodeSent(email)
+    } catch (error) {
+      if (error instanceof UnknownRequestUriError) showBoundary(error)
+      throw error
+    }
   }
 
   return (

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Account, Api } from '../../../lib/api.ts'
+import { useErrorBoundary } from 'react-error-boundary'
+import { Account, Api, UnknownRequestUriError } from '../../../lib/api.ts'
 import { OtpCodeForm } from './otp-code-form.tsx'
 import { OtpEmailForm } from './otp-email-form.tsx'
 
@@ -18,6 +19,16 @@ export interface OtpSignInViewProps {
 export function OtpSignInView(props: OtpSignInViewProps) {
   const [step, setStep] = useState<'email' | 'code'>('email')
   const [email, setEmail] = useState('')
+  const { showBoundary } = useErrorBoundary<UnknownRequestUriError>()
+
+  const handleResend = async () => {
+    try {
+      await props.api.doOtpRequest(email)
+    } catch (error) {
+      if (error instanceof UnknownRequestUriError) showBoundary(error)
+      throw error
+    }
+  }
 
   if (step === 'email') {
     return (
@@ -40,7 +51,7 @@ export function OtpSignInView(props: OtpSignInViewProps) {
       email={email}
       brandColor={props.brandColor}
       onVerified={props.onAuthenticated}
-      onResend={() => props.api.doOtpRequest(email)}
+      onResend={handleResend}
     />
   )
 }
