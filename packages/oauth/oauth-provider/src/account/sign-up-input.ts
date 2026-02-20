@@ -9,9 +9,9 @@ import { newPasswordSchema } from '../types/password.js'
 export const signUpInputSchema = z
   .object({
     locale: localeSchema,
-    handle: handleSchema,
+    handle: handleSchema.optional(),
     email: emailSchema,
-    password: newPasswordSchema,
+    password: newPasswordSchema.optional(),
     inviteCode: inviteCodeSchema.optional(),
     hcaptchaToken: hcaptchaTokenSchema.optional(),
   })

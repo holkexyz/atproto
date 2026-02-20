@@ -11,6 +11,7 @@ import {
   AuthorizedClients,
   ClientId,
   Code,
+  CreateAccountData,
   DeviceAccount,
   DeviceData,
   DeviceId,
@@ -147,7 +148,7 @@ export class OAuthStore
     handle,
     email,
     password,
-  }: SignUpData): Promise<Account> {
+  }: CreateAccountData): Promise<Account> {
     // @TODO Send an account creation confirmation email (+verification link) to the user (in their locale)
     // @NOTE Password strength & length already enforced by the OAuthProvider
 

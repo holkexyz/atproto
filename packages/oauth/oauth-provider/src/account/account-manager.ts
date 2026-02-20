@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import {
   OAuthIssuerIdentifier,
   isOAuthClientIdLoopback,
@@ -25,9 +26,18 @@ import { SignUpInput } from './sign-up-input.js'
 const TIMING_ATTACK_MITIGATION_DELAY = 400
 const BRUTE_FORCE_MITIGATION_DELAY = 300
 
+function generateRandomHandle(domains: string[]): string {
+  const domain = domains[0] || 'unknown'
+  const domainClean = domain.startsWith('.') ? domain.slice(1) : domain
+  const n = BigInt('0x' + randomBytes(8).toString('hex'))
+  const suffix = n.toString(36).padStart(13, '0')
+  return `user-${suffix}.${domainClean}`
+}
+
 export class AccountManager {
   protected readonly inviteCodeRequired: boolean
   protected readonly hcaptchaClient?: HCaptchaClient
+  protected readonly availableUserDomains: string[]
 
   constructor(
     issuer: OAuthIssuerIdentifier,
@@ -39,6 +49,7 @@ export class AccountManager {
     this.hcaptchaClient = customization.hcaptcha
       ? new HCaptchaClient(new URL(issuer).hostname, customization.hcaptcha)
       : undefined
+    this.availableUserDomains = customization.availableUserDomains || []
   }
 
   protected async processHcaptchaToken(
@@ -56,7 +67,7 @@ export class AccountManager {
 
     const tokens = this.hcaptchaClient.buildClientTokens(
       deviceMetadata.ipAddress,
-      input.handle,
+      input.handle || input.email,
       deviceMetadata.userAgent,
     )
 
@@ -103,13 +114,20 @@ export class AccountManager {
     input: SignUpInput,
     deviceId: DeviceId,
     deviceMetadata: RequestMetadata,
-  ): Promise<SignUpData> {
+  ): Promise<SignUpData & { handle: string; password: string }> {
     const [hcaptchaResult, inviteCode] = await Promise.all([
       this.processHcaptchaToken(input, deviceId, deviceMetadata),
       this.enforceInviteCode(input, deviceId, deviceMetadata),
     ])
 
-    return { ...input, hcaptchaResult, inviteCode }
+    // Generate handle if not provided
+    const handle =
+      input.handle ?? generateRandomHandle(this.availableUserDomains)
+
+    // Generate password if not provided
+    const password = input.password ?? randomBytes(32).toString('hex')
+
+    return { ...input, handle, password, hcaptchaResult, inviteCode }
   }
 
   public async createAccount(
@@ -130,7 +148,14 @@ export class AccountManager {
     const account = await constantTime(
       BRUTE_FORCE_MITIGATION_DELAY,
       async () => {
-        return this.store.createAccount(data)
+        const { locale, email, password, handle, inviteCode } = data
+        return this.store.createAccount({
+          locale,
+          email,
+          password,
+          handle,
+          inviteCode,
+        })
       },
     ).catch((err) => {
       throw InvalidRequestError.from(err, 'Account creation failed')

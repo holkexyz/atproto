@@ -146,9 +146,9 @@ export type SignInOutput = {
 
 export type SignUpInput = {
   locale: string
-  handle: string
+  handle?: string
   email: string
-  password: string
+  password?: string
   inviteCode?: string
   hcaptchaToken?: string
 }
