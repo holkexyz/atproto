@@ -29,6 +29,7 @@ export type SignInViewProps = Override<
       ephemeralToken?: string
       consentRequired?: boolean
     }) => void
+    onSwitchToExternalProvider?: () => void
     onSignUp?: () => void
     onForgotPassword?: (emailHint?: string) => void
     onBack?: () => void
@@ -45,6 +46,7 @@ export function SignInView({
 
   onSignIn,
   onAuthenticated,
+  onSwitchToExternalProvider,
   onSignUp,
   onForgotPassword,
   onBack,
@@ -113,6 +115,7 @@ export function SignInView({
           brandColor={brandColor}
           onAuthenticated={onAuthenticated}
           onSwitchToPassword={() => setMode('password')}
+          onSwitchToExternalProvider={onSwitchToExternalProvider ?? (() => {})}
         />
       </LayoutTitlePage>
     )
@@ -142,6 +145,17 @@ export function SignInView({
               </button>
             </div>
           )}
+          {onSwitchToExternalProvider && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={onSwitchToExternalProvider}
+              >
+                <Trans>Sign in with another provider</Trans>
+              </button>
+            </div>
+          )}
         </SignInForm>
       </LayoutTitlePage>
     )
@@ -163,6 +177,17 @@ export function SignInView({
                 onClick={() => setMode('otp')}
               >
                 <Trans>Sign in with email code instead</Trans>
+              </button>
+            </div>
+          )}
+          {onSwitchToExternalProvider && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={onSwitchToExternalProvider}
+              >
+                <Trans>Sign in with another provider</Trans>
               </button>
             </div>
           )}
@@ -191,6 +216,17 @@ export function SignInView({
                 onClick={() => setMode('otp')}
               >
                 <Trans>Sign in with email code instead</Trans>
+              </button>
+            </div>
+          )}
+          {onSwitchToExternalProvider && (
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              <button
+                type="button"
+                className="underline hover:no-underline"
+                onClick={onSwitchToExternalProvider}
+              >
+                <Trans>Sign in with another provider</Trans>
               </button>
             </div>
           )}
