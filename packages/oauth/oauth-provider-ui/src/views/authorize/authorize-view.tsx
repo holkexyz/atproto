@@ -42,6 +42,8 @@ function getInitialView(
 ): (typeof View)[keyof typeof View] {
   if (promptMode === 'create' && canSignUp) {
     return View.SignUp
+  } else if (promptMode === 'login') {
+    return View.SignIn
   } else if (forceSignIn) {
     return View.SignIn
   } else if (!canSignUp || hasInitialSessions) {
