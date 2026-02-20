@@ -108,8 +108,6 @@ export function SignUpView({
       <FormCardAsync
         className="grow"
         invalid={!isValid}
-        onCancel={onBack}
-        cancelLabel={backLabel}
         onSubmit={doSubmit}
         submitLabel={<Trans>Sign up</Trans>}
         append={<SignUpDisclaimer links={links} />}
