@@ -83,7 +83,6 @@ msgstr "アバター"
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
 #: src/views/authorize/otp/otp-code-form.tsx:81
-#: src/views/authorize/external-provider/external-provider-form.tsx:38
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -168,7 +167,7 @@ msgstr "確認コード"
 
 #: src/views/error/cookie-error-view.tsx:34
 #: src/views/authorize/otp/otp-email-form.tsx:43
-#: src/views/authorize/external-provider/external-provider-form.tsx:39
+#: src/views/authorize/external-provider/external-provider-form.tsx:38
 msgid "Continue"
 msgstr ""
 
@@ -204,7 +203,7 @@ msgstr "説明"
 msgid "Didn't get it? Resend"
 msgstr ""
 
-#: src/views/authorize/external-provider/external-provider-form.tsx:46
+#: src/views/authorize/external-provider/external-provider-form.tsx:45
 msgid "e.g. alice.bsky.social or bsky.social"
 msgstr ""
 
@@ -257,8 +256,8 @@ msgstr "新しいパスワードを入力してください"
 msgid "Enter your password"
 msgstr "パスワードを入力"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:180
-#: src/views/authorize/sign-in/sign-in-view.tsx:213
+#: src/views/authorize/sign-in/sign-in-view.tsx:181
+#: src/views/authorize/sign-in/sign-in-view.tsx:215
 msgid "Enter your username and password"
 msgstr "ユーザー名とパスワードを入力してください"
 
@@ -293,7 +292,7 @@ msgstr "忘れた？"
 msgid "Grant access to your <0>{0}</0> account"
 msgstr "<0>{0}</0> アカウントへのアクセスを許可"
 
-#: src/views/authorize/external-provider/external-provider-form.tsx:41
+#: src/views/authorize/external-provider/external-provider-form.tsx:40
 msgid "Handle or hosting provider"
 msgstr ""
 
@@ -492,7 +491,7 @@ msgstr "パスワードをリセット"
 msgid "Select domain"
 msgstr "ドメインを選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:249
+#: src/views/authorize/sign-in/sign-in-view.tsx:252
 msgid "Select from an existing account"
 msgstr "既存のアカウントから選択"
 
@@ -520,16 +519,20 @@ msgstr "{0} でサインイン"
 msgid "Sign in as..."
 msgstr "アカウントの選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:167
-#: src/views/authorize/sign-in/sign-in-view.tsx:200
-#: src/views/authorize/sign-in/sign-in-view.tsx:237
+#: src/views/authorize/sign-in/sign-in-view.tsx:168
+#: src/views/authorize/sign-in/sign-in-view.tsx:202
+#: src/views/authorize/sign-in/sign-in-view.tsx:240
 #: src/views/authorize/otp/otp-email-form.tsx:68
 msgid "Sign in with ATProto/Bluesky"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:157
-#: src/views/authorize/sign-in/sign-in-view.tsx:190
-#: src/views/authorize/sign-in/sign-in-view.tsx:227
+#: src/views/authorize/external-provider/external-provider-form.tsx:59
+msgid "Sign in with Certified"
+msgstr ""
+
+#: src/views/authorize/sign-in/sign-in-view.tsx:158
+#: src/views/authorize/sign-in/sign-in-view.tsx:192
+#: src/views/authorize/sign-in/sign-in-view.tsx:230
 msgid "Sign in with email code instead"
 msgstr ""
 
