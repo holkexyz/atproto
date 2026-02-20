@@ -83,6 +83,7 @@ msgstr "アバター"
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
 #: src/views/authorize/otp/otp-code-form.tsx:81
+#: src/views/authorize/external-provider/external-provider-form.tsx:32
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -157,7 +158,7 @@ msgctxt "verb"
 msgid "Confirm"
 msgstr "確認"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:86
+#: src/views/authorize/sign-in/sign-in-view.tsx:87
 msgid "Confirm your password to continue"
 msgstr "続けるにはパスワードを確認してください"
 
@@ -166,7 +167,8 @@ msgid "Confirmation code"
 msgstr "確認コード"
 
 #: src/views/error/cookie-error-view.tsx:34
-#: src/views/authorize/otp/otp-email-form.tsx:43
+#: src/views/authorize/otp/otp-email-form.tsx:45
+#: src/views/authorize/external-provider/external-provider-form.tsx:33
 msgid "Continue"
 msgstr ""
 
@@ -210,7 +212,7 @@ msgstr "メールアドレス"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:50
+#: src/views/authorize/otp/otp-email-form.tsx:52
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "メールアドレス"
@@ -235,20 +237,24 @@ msgstr "メールアドレスを入力してください"
 msgid "Enter your email to get started"
 msgstr ""
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:108
+#: src/views/authorize/sign-in/sign-in-view.tsx:124
 msgid "Enter your email to sign in"
+msgstr ""
+
+#: src/views/authorize/sign-in/sign-in-view.tsx:109
+msgid "Enter your handle or hosting provider"
 msgstr ""
 
 #: src/components/forms/input-new-password.tsx:45
 msgid "Enter your new password"
 msgstr "新しいパスワードを入力してください"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:126
+#: src/views/authorize/sign-in/sign-in-view.tsx:143
 msgid "Enter your password"
 msgstr "パスワードを入力"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:155
-#: src/views/authorize/sign-in/sign-in-view.tsx:179
+#: src/views/authorize/sign-in/sign-in-view.tsx:181
+#: src/views/authorize/sign-in/sign-in-view.tsx:214
 msgid "Enter your username and password"
 msgstr "ユーザー名とパスワードを入力してください"
 
@@ -282,6 +288,10 @@ msgstr "忘れた？"
 #: src/views/authorize/consent/consent-view.tsx:45
 msgid "Grant access to your <0>{0}</0> account"
 msgstr "<0>{0}</0> アカウントへのアクセスを許可"
+
+#: src/views/authorize/external-provider/external-provider-form.tsx:35
+msgid "Handle or hosting provider"
+msgstr ""
 
 #: src/components/utils/help-card.tsx:32
 msgid "Having trouble? <0>Contact support</0>"
@@ -478,7 +488,7 @@ msgstr "パスワードをリセット"
 msgid "Select domain"
 msgstr "ドメインを選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:206
+#: src/views/authorize/sign-in/sign-in-view.tsx:250
 msgid "Select from an existing account"
 msgstr "既存のアカウントから選択"
 
@@ -492,7 +502,7 @@ msgctxt "verb"
 msgid "Sign in"
 msgstr "サインイン"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:69
+#: src/views/authorize/sign-in/sign-in-view.tsx:70
 msgctxt "noun"
 msgid "Sign in"
 msgstr "サインイン"
@@ -506,13 +516,20 @@ msgstr "{0} でサインイン"
 msgid "Sign in as..."
 msgstr "アカウントの選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:141
-#: src/views/authorize/sign-in/sign-in-view.tsx:165
-#: src/views/authorize/sign-in/sign-in-view.tsx:193
+#: src/views/authorize/sign-in/sign-in-view.tsx:168
+#: src/views/authorize/sign-in/sign-in-view.tsx:201
+#: src/views/authorize/sign-in/sign-in-view.tsx:238
+#: src/views/authorize/otp/otp-email-form.tsx:79
+msgid "Sign in with another provider"
+msgstr ""
+
+#: src/views/authorize/sign-in/sign-in-view.tsx:158
+#: src/views/authorize/sign-in/sign-in-view.tsx:191
+#: src/views/authorize/sign-in/sign-in-view.tsx:228
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/otp/otp-email-form.tsx:68
+#: src/views/authorize/otp/otp-email-form.tsx:70
 msgid "Sign in with password"
 msgstr ""
 
