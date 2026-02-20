@@ -232,11 +232,12 @@ export function createAuthorizationPageMiddleware<
   // implement it here to avoid duplicating the logic.
   router.get(
     '/oauth/authorize/redirect',
-    withErrorHandler(sendErrorPage, async function (req, res) {
+    withErrorHandler(sendAuthorizeErrorPage, async function (req, res) {
       // Ensure we come from the authorization page
       validateFetchSite(req, ['same-origin'])
       validateFetchMode(req, ['navigate'])
-      validateFetchDest(req, ['document'])
+      // Allow 'iframe' to support embedding from trusted origins
+      validateFetchDest(req, ['document', 'iframe'])
       validateOrigin(req, issuerOrigin)
 
       const referrer = validateReferrer(req, {
@@ -247,7 +248,7 @@ export function createAuthorizationPageMiddleware<
       // Ensure we are coming from the authorization page
       requestUriSchema.parse(referrer.searchParams.get('request_uri'))
 
-      return sendRedirect(res, parseRedirectUrl(this.url), securityOptions)
+      return sendRedirect(res, parseRedirectUrl(this.url), authorizeSecurityOptions)
     }),
   )
 
