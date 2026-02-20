@@ -55,10 +55,10 @@ GCP project: `magic-pds`, account: `holke@hypercerts.org`
 This is the PDS that serves `otp.certs.network` with email OTP authentication.
 
 **Stack:** Docker Compose with two services:
-- `pds` — built from `services/pds/Dockerfile` in this repo
+- `pds` — pre-built image from GHCR (`ghcr.io/holkexyz/atproto/pds:latest`)
 - `caddy` — reverse proxy with automatic TLS (on-demand certs)
 
-**Repo on VM:** `/opt/otp-pds` — a clone of `https://github.com/holkexyz/atproto.git` on branch `feature/email-otp-auth-clean`
+**Image:** Built automatically by GitHub Actions (`.github/workflows/build-and-push-pds-fork.yaml`) on every push to `feature/email-otp-auth-clean`. Pushed to `ghcr.io/holkexyz/atproto/pds:latest` and `ghcr.io/holkexyz/atproto/pds:<commit-sha>`.
 
 **Config:** `/opt/otp-pds/.env` (contains secrets — SMTP, JWT keys, admin password)
 
@@ -68,19 +68,21 @@ This is the PDS that serves `otp.certs.network` with email OTP authentication.
 # 1. Push your changes to origin first
 git push
 
-# 2. Pull on the VM, rebuild, and restart (single command)
-gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
-  --command="cd /opt/otp-pds && git pull origin feature/email-otp-auth-clean && docker compose up -d --build pds"
+# 2. Wait for the CI build to complete (~6 min cold, ~2 min cached)
+gh run list --workflow=build-and-push-pds-fork.yaml -R holkexyz/atproto --limit 1
+gh run watch <run-id> -R holkexyz/atproto --exit-status
 
-# 3. Verify health (wait ~15s for healthcheck)
+# 3. Pull the new image and restart on the VM (~30 seconds)
+gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
+  --command="cd /opt/otp-pds && docker pull ghcr.io/holkexyz/atproto/pds:latest && docker compose up -d pds"
+
+# 4. Verify health (wait ~15s for healthcheck)
 gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
   --command="sleep 15 && docker ps --format 'table {{.Names}}\t{{.Status}}'"
 
-# 4. Smoke test
+# 5. Smoke test
 curl -s https://otp.certs.network/xrpc/_health
 ```
-
-**Timeout note:** The Docker build takes ~8 minutes on a cold build (no cache). With cache it's ~30 seconds. Set `--timeout 900000` if running via the Bash tool.
 
 ### Useful commands
 
@@ -112,11 +114,7 @@ gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
 ### Rollback
 
 ```bash
-# Find the previous commit
+# Deploy a specific image version by commit SHA
 gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
-  --command="cd /opt/otp-pds && git log --oneline -5"
-
-# Reset to a specific commit and rebuild
-gcloud compute ssh otp-pds-01 --zone=europe-north2-b \
-  --command="cd /opt/otp-pds && git checkout <commit-hash> && docker compose up -d --build pds"
+  --command="cd /opt/otp-pds && docker pull ghcr.io/holkexyz/atproto/pds:<commit-sha> && docker compose up -d pds"
 ```
