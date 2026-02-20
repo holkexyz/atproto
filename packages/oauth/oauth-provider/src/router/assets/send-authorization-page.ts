@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { CspValue } from '../../lib/csp/index.js'
 import { Customization } from '../../customization/customization.js'
 import { AuthorizationResultAuthorizePage } from '../../result/authorization-result-authorize-page.js'
 import { SendWebAppOptions, sendWebAppFactory } from './assets.js'
@@ -6,12 +7,18 @@ import { SendWebAppOptions, sendWebAppFactory } from './assets.js'
 export function sendAuthorizePageFactory(
   customization: Customization,
   options?: SendWebAppOptions,
+  frameAncestors?: string[],
 ) {
   const sendApp = sendWebAppFactory(
     'authorization-page',
     customization,
     options,
   )
+
+  // Build the per-page CSP override if frameAncestors is provided
+  const authorizeCsp = frameAncestors?.length
+    ? { 'frame-ancestors': frameAncestors as CspValue[] }
+    : undefined
 
   return async function sendAuthorizePage(
     req: IncomingMessage,
@@ -37,6 +44,7 @@ export function sendAuthorizePageFactory(
         },
         __sessions: data.sessions,
       },
+      csp: authorizeCsp,
     })
   }
 }

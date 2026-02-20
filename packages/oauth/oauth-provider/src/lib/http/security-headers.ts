@@ -48,6 +48,10 @@ export type SecurityHeadersOptions = {
    * Defaults to 2 years. Use `false` to disable HSTS.
    */
   hsts?: HTTPStrictTransportSecurityConfig | false
+  /**
+   * Skip X-Frame-Options header. Use when relying on CSP frame-ancestors instead.
+   */
+  skipXFrameOptions?: boolean
 }
 
 export function* buildSecurityHeaders({
@@ -56,6 +60,7 @@ export function* buildSecurityHeaders({
   corp = CrossOriginResourcePolicy.sameOrigin,
   coop = CrossOriginOpenerPolicy.sameOrigin,
   hsts = { maxAge: 63072000 },
+  skipXFrameOptions = false,
 }: SecurityHeadersOptions): Generator<[string, string], void, unknown> {
   // @NOTE Never set CSP through http-equiv meta as not all directives will
   // be honored. Always set it through the Content-Security-Policy header.
@@ -75,7 +80,9 @@ export function* buildSecurityHeaders({
   // @TODO make these headers configurable (?)
   yield ['Permissions-Policy', 'otp-credentials=*, document-domain=()']
   yield ['Referrer-Policy', 'same-origin']
-  yield ['X-Frame-Options', 'DENY']
+  if (!skipXFrameOptions) {
+    yield ['X-Frame-Options', 'DENY']
+  }
   yield ['X-Content-Type-Options', 'nosniff']
   yield ['X-XSS-Protection', '0']
 }

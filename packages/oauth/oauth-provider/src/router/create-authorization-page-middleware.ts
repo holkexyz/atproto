@@ -48,9 +48,23 @@ export function createAuthorizationPageMiddleware<
     hsts: issuerUrl.protocol === 'http:' ? false : undefined,
   }
 
+  // For the authorize page, skip X-Frame-Options since we use CSP frame-ancestors
+  const authorizeSecurityOptions: SecurityHeadersOptions = {
+    ...securityOptions,
+    skipXFrameOptions: true,
+  }
+
+  const frameAncestors = [
+    "'self'",
+    'https://certified-app-seven.vercel.app',
+    'https://*.vercel.app',
+    'http://localhost:*',
+  ]
+
   const sendAuthorizePage = sendAuthorizePageFactory(
     server.customization,
-    securityOptions,
+    authorizeSecurityOptions,
+    frameAncestors,
   )
   const sendErrorPage = sendErrorPageFactory(
     server.customization,
