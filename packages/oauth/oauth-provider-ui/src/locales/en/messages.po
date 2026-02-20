@@ -120,7 +120,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "Call"
 
-#: src/views/authorize/authorize-view.tsx:182
+#: src/views/authorize/authorize-view.tsx:183
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -202,7 +202,7 @@ msgstr "Description"
 msgid "Didn't get it? Resend"
 msgstr "Didn't get it? Resend"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:133
+#: src/views/authorize/sign-up/sign-up-view.tsx:140
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
@@ -231,7 +231,7 @@ msgstr "Enter the email you used to create your account. We'll send you a \"rese
 msgid "Enter your email address"
 msgstr "Enter your email address"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:106
+#: src/views/authorize/sign-up/sign-up-view.tsx:108
 msgid "Enter your email to get started"
 msgstr "Enter your email to get started"
 
@@ -256,7 +256,7 @@ msgstr "Enter your username and password"
 msgid "Error"
 msgstr "Error"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:122
+#: src/views/authorize/sign-up/sign-up-view.tsx:129
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "example-com-xxxxx-xxxxx"
@@ -312,8 +312,8 @@ msgstr "Interface language selector"
 msgid "Invalid"
 msgstr "Invalid"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:116
-#: src/views/authorize/sign-up/sign-up-view.tsx:121
+#: src/views/authorize/sign-up/sign-up-view.tsx:123
+#: src/views/authorize/sign-up/sign-up-view.tsx:128
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:95
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
@@ -328,7 +328,7 @@ msgstr "It seems that your browser is not accepting cookies. Press \"Continue\" 
 msgid "Let's get your password reset!"
 msgstr "Let's get your password reset!"
 
-#: src/views/authorize/authorize-view.tsx:221
+#: src/views/authorize/authorize-view.tsx:222
 msgid "Login complete"
 msgstr "Login complete"
 
@@ -516,8 +516,8 @@ msgstr "Sign in with email code instead"
 msgid "Sign in with password"
 msgstr "Sign in with password"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:105
-#: src/views/authorize/sign-up/sign-up-view.tsx:112
+#: src/views/authorize/sign-up/sign-up-view.tsx:107
+#: src/views/authorize/sign-up/sign-up-view.tsx:114
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "Sign up"
@@ -667,7 +667,7 @@ msgstr "Weak"
 msgid "Wrong identifier or password"
 msgstr "Wrong identifier or password"
 
-#: src/views/authorize/authorize-view.tsx:222
+#: src/views/authorize/authorize-view.tsx:223
 msgid "You are being redirected..."
 msgstr "You are being redirected..."
 
