@@ -7,6 +7,7 @@ import {
 } from '../../../components/layouts/layout-title-page.tsx'
 import { Account, Api } from '../../../lib/api.ts'
 import { Override } from '../../../lib/util.ts'
+import { ExternalProviderForm } from '../external-provider/external-provider-form.tsx'
 import { OtpSignInView } from '../otp/otp-sign-in-view.tsx'
 import { SignInForm, SignInFormOutput } from './sign-in-form.tsx'
 import { SignInPicker } from './sign-in-picker.tsx'
@@ -29,7 +30,6 @@ export type SignInViewProps = Override<
       ephemeralToken?: string
       consentRequired?: boolean
     }) => void
-    onSwitchToExternalProvider?: () => void
     onSignUp?: () => void
     onForgotPassword?: (emailHint?: string) => void
     onBack?: () => void
@@ -46,7 +46,6 @@ export function SignInView({
 
   onSignIn,
   onAuthenticated,
-  onSwitchToExternalProvider,
   onSignUp,
   onForgotPassword,
   onBack,
@@ -64,7 +63,7 @@ export function SignInView({
   const [showSignInForm, setShowSignInForm] = useState(sessions.length === 0)
 
   // Default to OTP mode when onAuthenticated is provided; otherwise fall back to password
-  const [mode, setMode] = useState<'otp' | 'password'>(
+  const [mode, setMode] = useState<'otp' | 'password' | 'external-provider'>(
     onAuthenticated ? 'otp' : 'password',
   )
 
@@ -101,6 +100,21 @@ export function SignInView({
     )
   }
 
+  // External provider mode: show the external provider form
+  if (mode === 'external-provider') {
+    return (
+      <LayoutTitlePage
+        {...props}
+        title={title}
+        subtitle={<Trans>Enter your handle or hosting provider</Trans>}
+      >
+        <ExternalProviderForm
+          onBack={() => setMode(onAuthenticated ? 'otp' : 'password')}
+        />
+      </LayoutTitlePage>
+    )
+  }
+
   // OTP mode: show OTP sign-in view (primary flow when onAuthenticated is provided)
   if (onAuthenticated && mode === 'otp') {
     return (
@@ -115,7 +129,7 @@ export function SignInView({
           brandColor={brandColor}
           onAuthenticated={onAuthenticated}
           onSwitchToPassword={() => setMode('password')}
-          onSwitchToExternalProvider={onSwitchToExternalProvider ?? (() => {})}
+          onSwitchToExternalProvider={() => setMode('external-provider')}
         />
       </LayoutTitlePage>
     )
@@ -145,17 +159,15 @@ export function SignInView({
               </button>
             </div>
           )}
-          {onSwitchToExternalProvider && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-              <button
-                type="button"
-                className="underline hover:no-underline"
-                onClick={onSwitchToExternalProvider}
-              >
-                <Trans>Sign in with another provider</Trans>
-              </button>
-            </div>
-          )}
+          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <button
+              type="button"
+              className="underline hover:no-underline"
+              onClick={() => setMode('external-provider')}
+            >
+              <Trans>Sign in with another provider</Trans>
+            </button>
+          </div>
         </SignInForm>
       </LayoutTitlePage>
     )
@@ -180,17 +192,15 @@ export function SignInView({
               </button>
             </div>
           )}
-          {onSwitchToExternalProvider && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-              <button
-                type="button"
-                className="underline hover:no-underline"
-                onClick={onSwitchToExternalProvider}
-              >
-                <Trans>Sign in with another provider</Trans>
-              </button>
-            </div>
-          )}
+          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <button
+              type="button"
+              className="underline hover:no-underline"
+              onClick={() => setMode('external-provider')}
+            >
+              <Trans>Sign in with another provider</Trans>
+            </button>
+          </div>
         </SignInForm>
       </LayoutTitlePage>
     )
@@ -219,17 +229,15 @@ export function SignInView({
               </button>
             </div>
           )}
-          {onSwitchToExternalProvider && (
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-              <button
-                type="button"
-                className="underline hover:no-underline"
-                onClick={onSwitchToExternalProvider}
-              >
-                <Trans>Sign in with another provider</Trans>
-              </button>
-            </div>
-          )}
+          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <button
+              type="button"
+              className="underline hover:no-underline"
+              onClick={() => setMode('external-provider')}
+            >
+              <Trans>Sign in with another provider</Trans>
+            </button>
+          </div>
         </SignInForm>
       </LayoutTitlePage>
     )
