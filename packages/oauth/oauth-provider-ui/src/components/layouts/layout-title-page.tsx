@@ -38,10 +38,11 @@ export function LayoutTitlePage({
 
       <div
         className={clsx(
+          'hidden md:flex',
           'px-6 pt-4',
           'w-full',
           'md:max-w-lg',
-          'flex flex-row items-center',
+          'flex-row items-center',
           'md:flex-col md:items-end',
           'md:self-stretch',
           'md:max-w-fix md:w-1/2 md:p-4',
@@ -72,7 +73,14 @@ export function LayoutTitlePage({
       </div>
 
       <main className="flex w-full grow flex-col items-center justify-center p-6 md:max-w-3xl md:px-12">
-        <div className="w-full">{children}</div>
+        <div className="w-full">
+          {title && (
+            <h1 className="text-primary mb-4 text-xl font-semibold md:hidden">
+              {title}
+            </h1>
+          )}
+          {children}
+        </div>
       </main>
     </div>
   )
