@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { SESSION_FIXATION_MAX_AGE } from '../constants.js'
 import { parseHttpCookies } from '../lib/http/index.js'
 import {
+  CookieSerializeOptions,
   RequestMetadata,
   extractRequestMetadata,
   setCookie,
@@ -66,7 +67,7 @@ export const deviceManagerOptionsSchema = z.object({
        *
        * @default 'lax'
        */
-      sameSite: z.enum(['lax', 'strict']).default('lax'),
+      sameSite: z.enum(['lax', 'strict', 'none']).default('lax'),
     })
     .default({}),
 })
@@ -276,7 +277,8 @@ export class DeviceManager {
       path: '/',
       secure: this.options.cookie.secure !== false,
       sameSite: this.options.cookie.sameSite,
-    } as const
+      ...(this.options.cookie.sameSite === 'none' ? { partitioned: true } : {}),
+    } as CookieSerializeOptions
 
     setCookie(res, name, value || '', cookieOptions)
 

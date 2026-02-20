@@ -313,6 +313,11 @@ export class OAuthProvider extends OAuthVerifier {
         // false for localhost usage. This is not really an issue with Chrome
         // and Firefox, but Safari enforces it strictly.
         secure: !this.issuer.startsWith('http:'),
+        // Required for cross-origin iframe embedding. CSP frame-ancestors
+        // restricts which origins can embed the page, providing the security
+        // boundary. SameSite=None with Secure=true is safe when combined with
+        // other protections (CSRF double-submit, Sec-Fetch-* headers).
+        sameSite: 'none',
       },
     })
     this.accountManager = new AccountManager(
