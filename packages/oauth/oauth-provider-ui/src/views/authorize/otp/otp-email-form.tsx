@@ -36,38 +36,38 @@ export function OtpEmailForm({
   }
 
   return (
-    <FormCardAsync
-      onSubmit={doSubmit}
-      invalid={!email}
-      submitLabel={<Trans>Continue</Trans>}
-      submitStyle={
-        brandColor
-          ? { backgroundColor: brandColor, borderColor: brandColor }
-          : undefined
-      }
-      append={
-        <div className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-          <button
-            type="button"
-            className="underline hover:no-underline"
-            onClick={onSwitchToPassword}
-          >
-            <Trans>Sign in with password</Trans>
-          </button>
-        </div>
-      }
-    >
-      <Fieldset label={<Trans>Email address</Trans>}>
-        <InputEmailAddress
-          name="email"
-          defaultValue={loginHint}
-          required
-          autoFocus={!loginHint}
-          readOnly={!!loginHint}
-          disabled={!!loginHint}
-          onEmail={setEmail}
-        />
-      </Fieldset>
-    </FormCardAsync>
+    <>
+      <FormCardAsync
+        onSubmit={doSubmit}
+        invalid={!email}
+        submitLabel={<Trans>Continue</Trans>}
+        submitStyle={
+          brandColor
+            ? { backgroundColor: brandColor, borderColor: brandColor }
+            : undefined
+        }
+      >
+        <Fieldset label={<Trans>Email address</Trans>}>
+          <InputEmailAddress
+            name="email"
+            defaultValue={loginHint}
+            required
+            autoFocus={!loginHint}
+            readOnly={!!loginHint}
+            disabled={!!loginHint}
+            onEmail={setEmail}
+          />
+        </Fieldset>
+      </FormCardAsync>
+      <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
+        <button
+          type="button"
+          className="underline hover:no-underline"
+          onClick={onSwitchToPassword}
+        >
+          <Trans>Sign in with password</Trans>
+        </button>
+      </div>
+    </>
   )
 }
