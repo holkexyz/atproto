@@ -18,10 +18,11 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .values([
       {
         clientId:
-          'https://certified.earth/.well-known/oauth-client-metadata',
+          'https://certified-app-seven.vercel.app/.well-known/oauth-client-metadata',
         brandName: 'Certified',
-        logoUrl: 'https://certified.earth/logo.png',
-        brandColor: '#1A1A2E',
+        logoUrl:
+          'https://certified-app-seven.vercel.app/assets/certified_brandmark.svg',
+        brandColor: '#0F2544',
         supportEmail: 'support@certified.earth',
       },
       {
