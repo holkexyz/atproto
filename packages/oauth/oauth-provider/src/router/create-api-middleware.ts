@@ -77,7 +77,7 @@ export function createApiMiddleware<
   Res extends ServerResponse = ServerResponse,
 >(
   server: OAuthProvider,
-  { onError }: MiddlewareOptions<Req, Res>,
+  { onError, iframeEnabled }: MiddlewareOptions<Req, Res>,
 ): Middleware<Ctx, Req, Res> {
   const issuerUrl = new URL(server.issuer)
   const issuerOrigin = issuerUrl.origin
@@ -452,7 +452,11 @@ export function createApiMiddleware<
             )
 
             const clientData = authorizedClients.get(clientId)
-            if (server.checkConsentRequired(parameters, clientData, { isTrusted: client.info.isTrusted })) {
+            if (
+              server.checkConsentRequired(parameters, clientData, {
+                isTrusted: client.info.isTrusted,
+              })
+            ) {
               const scopes = new Set(clientData?.authorizedScopes)
 
               // Add the newly accepted scopes to the authorized scopes
@@ -879,7 +883,11 @@ export function createApiMiddleware<
             : undefined
 
         // Validate CSRF token
-        await validateCsrfToken(req, res)
+        await validateCsrfToken(
+          req,
+          res,
+          iframeEnabled ? { sameSite: 'none' } : undefined,
+        )
 
         // Parse and validate the input data
         const input = await parseInput.call(this, req)

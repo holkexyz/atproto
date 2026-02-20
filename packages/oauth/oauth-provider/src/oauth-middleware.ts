@@ -41,6 +41,9 @@ export function oauthMiddleware<
         }
       : onError
 
+  // This PDS uses iframe embedding for the authorize page
+  options.iframeEnabled = true
+
   return asHandler(
     combineMiddlewares([
       assetsMiddleware,

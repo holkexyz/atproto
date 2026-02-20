@@ -9,10 +9,16 @@ export function sendAuthorizePageFactory(
   options?: SendWebAppOptions,
   frameAncestors?: string[],
 ) {
+  // Use SameSite=None for the CSRF cookie when the page can be embedded in
+  // cross-origin iframes (frameAncestors has entries beyond just "'self'")
+  const csrfSameSite =
+    frameAncestors && frameAncestors.length > 1 ? 'none' : undefined
+
   const sendApp = sendWebAppFactory(
     'authorization-page',
     customization,
     options,
+    csrfSameSite,
   )
 
   // Build the per-page CSP override if frameAncestors is provided

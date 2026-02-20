@@ -6,4 +6,5 @@ export type MiddlewareOptions<
   Res extends ServerResponse = ServerResponse,
 > = {
   onError?: ErrorHandler<Req, Res>
+  iframeEnabled?: boolean
 }

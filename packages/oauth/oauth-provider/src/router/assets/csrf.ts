@@ -21,23 +21,36 @@ const CSRF_COOKIE_OPTIONS: Readonly<CookieSerializeOptions> = {
   path: `/`,
 }
 
+export type CsrfOptions = { sameSite?: 'lax' | 'none' }
+
 async function generateCsrfToken() {
   return randomHexId(TOKEN_BYTE_LENGTH)
+}
+
+function buildCsrfCookieOptions(
+  options?: CsrfOptions,
+): Readonly<CookieSerializeOptions> {
+  if (options?.sameSite === 'none') {
+    return { ...CSRF_COOKIE_OPTIONS, sameSite: 'none', partitioned: true }
+  }
+  return CSRF_COOKIE_OPTIONS
 }
 
 export async function setupCsrfToken(
   req: IncomingMessage,
   res: ServerResponse,
+  options?: CsrfOptions,
 ): Promise<void> {
   const token = getCookieCsrf(req) || (await generateCsrfToken())
 
   // Refresh cookie (See Chrome's "Lax+POST" behavior)
-  setCookie(res, CSRF_COOKIE_NAME, token, CSRF_COOKIE_OPTIONS)
+  setCookie(res, CSRF_COOKIE_NAME, token, buildCsrfCookieOptions(options))
 }
 
 export async function validateCsrfToken(
   req: IncomingMessage,
   res: ServerResponse,
+  options?: CsrfOptions,
 ) {
   const cookieValue = getCookieCsrf(req)
   const headerValue = getHeadersCsrf(req)
@@ -48,7 +61,7 @@ export async function validateCsrfToken(
     res,
     CSRF_COOKIE_NAME,
     cookieValue || (await generateCsrfToken()),
-    CSRF_COOKIE_OPTIONS,
+    buildCsrfCookieOptions(options),
   )
 
   if (!headerValue) {

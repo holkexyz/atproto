@@ -17,6 +17,7 @@ import { mergeDefaults } from '../../lib/util/object.js'
 import { Simplify } from '../../lib/util/type.js'
 import { WriteHtmlOptions, writeHtml } from '../../lib/write-html.js'
 import { parseAssetsManifest } from './assets-manifest.js'
+import type { CsrfOptions } from './csrf.js'
 import { setupCsrfToken } from './csrf.js'
 
 // If the "ui" and "frontend" packages are ever unified, this can be replaced
@@ -73,6 +74,7 @@ export function sendWebAppFactory<P extends keyof HydrationData>(
   page: P,
   customization: Customization,
   defaults: SendWebAppOptions = {},
+  csrfSameSite?: CsrfOptions['sameSite'],
 ) {
   // Pre-computed options:
   const customizationData = buildCustomizationData(customization)
@@ -91,7 +93,11 @@ export function sendWebAppFactory<P extends keyof HydrationData>(
       data: Omit<HydrationData[P], '__customizationData'>
     },
   ): Promise<void> {
-    await setupCsrfToken(req, res)
+    await setupCsrfToken(
+      req,
+      res,
+      csrfSameSite ? { sameSite: csrfSameSite } : undefined,
+    )
 
     const script = declareHydrationData({
       ...options.data,
