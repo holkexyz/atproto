@@ -463,16 +463,23 @@ export class OAuthStore
       )
       if (account) {
         const branding = await getTrustedClient(this.db, data.clientId)
-        await this.mailer.sendOtpCode(
-          {
-            code,
-            brandName: branding?.brandName ?? 'Your account',
-            brandColor: branding?.brandColor ?? '#333333',
-            logoUrl: branding?.logoUrl,
-            supportEmail: branding?.supportEmail,
-          },
-          { to: data.emailNorm },
-        )
+        try {
+          await this.mailer.sendOtpCode(
+            {
+              code,
+              brandName: branding?.brandName ?? 'Your account',
+              brandColor: branding?.brandColor ?? '#333333',
+              logoUrl: branding?.logoUrl,
+              supportEmail: branding?.supportEmail,
+            },
+            { to: data.emailNorm },
+          )
+        } catch (err) {
+          dbLogger.error(
+            { err, email: data.emailNorm },
+            'Failed to send OTP email',
+          )
+        }
       }
     } finally {
       // Ensure consistent response time regardless of account existence
