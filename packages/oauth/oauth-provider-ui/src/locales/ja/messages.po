@@ -13,12 +13,12 @@ msgstr ""
 "Language-Team: Japanese\n"
 "Plural-Forms: \n"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:221
+#: src/views/authorize/sign-in/sign-in-form.tsx:213
 msgid "2FA Confirmation"
 msgstr "２要素認証の確認"
 
-#: src/views/authorize/otp/otp-code-form.tsx:95
-#: src/views/authorize/otp/otp-code-form.tsx:110
+#: src/views/authorize/otp/otp-code-form.tsx:98
+#: src/views/authorize/otp/otp-code-form.tsx:113
 msgid "6-digit code"
 msgstr ""
 
@@ -79,9 +79,10 @@ msgid "Avatar"
 msgstr "アバター"
 
 #: src/views/authorize/sign-in/sign-in-picker.tsx:59
-#: src/views/authorize/sign-in/sign-in-form.tsx:132
+#: src/views/authorize/sign-in/sign-in-form.tsx:131
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
+#: src/views/authorize/otp/otp-code-form.tsx:81
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -110,16 +111,16 @@ msgstr "<0>承認する</0>をクリックすると、<1>利用規約</1>と<2>�
 
 #. placeholder {0}: tosLink ? ( <LinkAnchor className="text-primary underline" link={tosLink}> <Trans>Terms of Service</Trans> </LinkAnchor> ) : ( <Trans>Terms of Service</Trans> )
 #. placeholder {1}: ppLink ? ( <LinkAnchor className="text-primary underline" link={ppLink}> <Trans>Privacy Policy</Trans> </LinkAnchor> ) : ( <Trans>Privacy Policy</Trans> )
-#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:30
-msgid "By creating an account you agree to the {0} and the {1} of this service."
-msgstr "アカウントを作成することで、このサービスの {0} および {1} に同意したものとみなされます。"
+#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:49
+msgid "By creating an account you agree to the {0} and the {1} of Certified."
+msgstr ""
 
 #: src/components/utils/scope-description.tsx:550
 msgctxt "RPC lxm"
 msgid "Call"
 msgstr "呼び出し"
 
-#: src/views/authorize/authorize-view.tsx:180
+#: src/views/authorize/authorize-view.tsx:182
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -134,13 +135,9 @@ msgid "Chat"
 msgstr "チャット"
 
 #. placeholder {0}: secondFactor.hint
-#: src/views/authorize/sign-in/sign-in-form.tsx:234
+#: src/views/authorize/sign-in/sign-in-form.tsx:226
 msgid "Check your {0} email for a login code and enter it here."
 msgstr "確認コードが記載されたメール {0} を確認し、ここに入力してください。"
-
-#: src/views/authorize/sign-up/sign-up-view.tsx:99
-#~ msgid "Choose a username"
-#~ msgstr "ユーザー名を選んでください"
 
 #: src/components/utils/error-card.tsx:76
 msgid "Code"
@@ -155,7 +152,7 @@ msgstr "詳細を閉じる"
 msgid "Collection"
 msgstr "コレクション"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:139
+#: src/views/authorize/sign-in/sign-in-form.tsx:138
 msgctxt "verb"
 msgid "Confirm"
 msgstr "確認"
@@ -164,11 +161,12 @@ msgstr "確認"
 msgid "Confirm your password to continue"
 msgstr "続けるにはパスワードを確認してください"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:225
+#: src/views/authorize/sign-in/sign-in-form.tsx:217
 msgid "Confirmation code"
 msgstr "確認コード"
 
 #: src/views/error/cookie-error-view.tsx:34
+#: src/views/authorize/otp/otp-email-form.tsx:43
 msgid "Continue"
 msgstr ""
 
@@ -183,10 +181,6 @@ msgstr "作成"
 #: src/views/authorize/welcome/welcome-view.tsx:35
 msgid "Create a new account"
 msgstr "新規アカウントの作成"
-
-#: src/views/authorize/sign-up/sign-up-view.tsx:82
-#~ msgid "Create Account"
-#~ msgstr "アカウントを作成"
 
 #: src/components/utils/scope-description.tsx:596
 msgid "Create, update, and delete any public record"
@@ -204,11 +198,11 @@ msgstr "拒否する"
 msgid "Description"
 msgstr "説明"
 
-#: src/views/authorize/otp/otp-code-form.tsx:85
+#: src/views/authorize/otp/otp-code-form.tsx:88
 msgid "Didn't get it? Resend"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:135
+#: src/views/authorize/sign-up/sign-up-view.tsx:133
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
@@ -216,7 +210,7 @@ msgstr "メールアドレス"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:57
+#: src/views/authorize/otp/otp-email-form.tsx:50
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "メールアドレス"
@@ -253,8 +247,8 @@ msgstr "新しいパスワードを入力してください"
 msgid "Enter your password"
 msgstr "パスワードを入力"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:157
-#: src/views/authorize/sign-in/sign-in-view.tsx:186
+#: src/views/authorize/sign-in/sign-in-view.tsx:155
+#: src/views/authorize/sign-in/sign-in-view.tsx:179
 msgid "Enter your username and password"
 msgstr "ユーザー名とパスワードを入力してください"
 
@@ -262,7 +256,7 @@ msgstr "ユーザー名とパスワードを入力してください"
 msgid "Error"
 msgstr "エラー"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:124
+#: src/views/authorize/sign-up/sign-up-view.tsx:122
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "example-com-xxxxx-xxxxx"
@@ -280,7 +274,7 @@ msgstr "最強"
 msgid "Forgot Password"
 msgstr "パスワードを忘れた"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:189
+#: src/views/authorize/sign-in/sign-in-form.tsx:188
 msgid "Forgot?"
 msgstr "忘れた？"
 
@@ -302,7 +296,7 @@ msgid "Home"
 msgstr "ホーム"
 
 #: src/views/authorize/sign-in/sign-in-picker.tsx:91
-#: src/views/authorize/sign-in/sign-in-form.tsx:146
+#: src/views/authorize/sign-in/sign-in-form.tsx:145
 msgid "Identifier"
 msgstr "識別子"
 
@@ -318,8 +312,8 @@ msgstr "言語選択"
 msgid "Invalid"
 msgstr "無効"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:118
-#: src/views/authorize/sign-up/sign-up-view.tsx:123
+#: src/views/authorize/sign-up/sign-up-view.tsx:116
+#: src/views/authorize/sign-up/sign-up-view.tsx:121
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:95
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
@@ -334,7 +328,7 @@ msgstr ""
 msgid "Let's get your password reset!"
 msgstr "パスワードをリセットしましょう！"
 
-#: src/views/authorize/authorize-view.tsx:219
+#: src/views/authorize/authorize-view.tsx:221
 msgid "Login complete"
 msgstr "ログイン完了"
 
@@ -397,7 +391,7 @@ msgid "Only letters, numbers, and hyphens"
 msgstr "英数字とハイフンのみ"
 
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:127
-#: src/views/authorize/sign-in/sign-in-form.tsx:170
+#: src/views/authorize/sign-in/sign-in-form.tsx:169
 #: src/components/forms/input-password.tsx:53
 msgid "Password"
 msgstr "パスワード"
@@ -430,12 +424,8 @@ msgstr "あなたに代わってアクションを実行する"
 msgid "Perform authenticated actions towards <0>any service</0> on your behalf"
 msgstr "あなたに代わって認証されたアクションを <0>任意のサービス</0> が実行する"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:201
-msgid "Please verify the domain name of the website before entering your password. Never enter your password on a domain you do not trust."
-msgstr "パスワードを入力する前に、ウェブサイトのドメインを確認してください。信用できないドメインには絶対にパスワードを入力しないでください。"
-
-#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:42
-#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:45
+#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:61
+#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:64
 #: src/components/utils/link-title.tsx:18
 msgid "Privacy Policy"
 msgstr "プライバシーポリシー"
@@ -456,8 +446,10 @@ msgstr "あなたのアカウントのメールアドレスを読み取り、更
 msgid "Read your account's email address"
 msgstr "あなたのアカウントのメールアドレスを読み取る"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:209
-#: src/views/authorize/sign-in/sign-in-form.tsx:214
+#: src/views/authorize/sign-in/sign-in-form.tsx:201
+#: src/views/authorize/sign-in/sign-in-form.tsx:206
+#: src/views/authorize/otp/otp-code-form.tsx:124
+#: src/views/authorize/otp/otp-code-form.tsx:128
 msgid "Remember this account on this device"
 msgstr "このアカウントをこのデバイスに記憶する"
 
@@ -466,7 +458,7 @@ msgstr "このアカウントをこのデバイスに記憶する"
 msgid "Repository"
 msgstr "リポジトリ"
 
-#: src/views/authorize/otp/otp-code-form.tsx:78
+#: src/views/authorize/otp/otp-code-form.tsx:85
 msgid "Resend available in {cooldown}s"
 msgstr ""
 
@@ -478,7 +470,7 @@ msgstr "リセットコード"
 msgid "Reset Password"
 msgstr "パスワードをリセット"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:187
+#: src/views/authorize/sign-in/sign-in-form.tsx:186
 msgid "Reset your password"
 msgstr "パスワードをリセット"
 
@@ -486,20 +478,16 @@ msgstr "パスワードをリセット"
 msgid "Select domain"
 msgstr "ドメインを選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:213
+#: src/views/authorize/sign-in/sign-in-view.tsx:206
 msgid "Select from an existing account"
 msgstr "既存のアカウントから選択"
 
-#: src/views/authorize/otp/otp-email-form.tsx:43
-msgid "Send me a code"
-msgstr ""
-
-#: src/views/authorize/otp/otp-code-form.tsx:92
+#: src/views/authorize/otp/otp-code-form.tsx:95
 msgid "Sent to {email}"
 msgstr ""
 
 #: src/views/authorize/welcome/welcome-view.tsx:45
-#: src/views/authorize/sign-in/sign-in-form.tsx:141
+#: src/views/authorize/sign-in/sign-in-form.tsx:140
 msgctxt "verb"
 msgid "Sign in"
 msgstr "サインイン"
@@ -518,18 +506,18 @@ msgstr "{0} でサインイン"
 msgid "Sign in as..."
 msgstr "アカウントの選択"
 
-#: src/views/authorize/sign-in/sign-in-view.tsx:143
-#: src/views/authorize/sign-in/sign-in-view.tsx:172
-#: src/views/authorize/sign-in/sign-in-view.tsx:200
+#: src/views/authorize/sign-in/sign-in-view.tsx:141
+#: src/views/authorize/sign-in/sign-in-view.tsx:165
+#: src/views/authorize/sign-in/sign-in-view.tsx:193
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/otp/otp-email-form.tsx:52
+#: src/views/authorize/otp/otp-email-form.tsx:68
 msgid "Sign in with password"
 msgstr ""
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:105
-#: src/views/authorize/sign-up/sign-up-view.tsx:114
+#: src/views/authorize/sign-up/sign-up-view.tsx:112
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "サインアップ"
@@ -558,8 +546,8 @@ msgstr "技術的な詳細"
 msgid "Temporarily activate or deactivate your account"
 msgstr "一時的にアカウントを有効化または無効化する"
 
-#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:34
-#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:37
+#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:53
+#: src/views/authorize/sign-up/sign-up-disclaimer.tsx:56
 #: src/components/utils/link-title.tsx:19
 msgid "Terms of Service"
 msgstr "利用規約"
@@ -651,7 +639,7 @@ msgstr "更新"
 msgid "Upload files"
 msgstr "ファイルのアップロード"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:151
+#: src/views/authorize/sign-in/sign-in-form.tsx:150
 msgid "Username or email address"
 msgstr "ユーザー名またはメールアドレス"
 
@@ -659,13 +647,9 @@ msgstr "ユーザー名またはメールアドレス"
 msgid "Valid"
 msgstr "有効"
 
-#: src/views/authorize/otp/otp-code-form.tsx:69
+#: src/views/authorize/otp/otp-code-form.tsx:74
 msgid "Verify"
 msgstr ""
-
-#: src/views/authorize/sign-up/sign-up-view.tsx:140
-#~ msgid "Verify you are human"
-#~ msgstr "あなたが人間であることを確認"
 
 #: src/views/authorize/consent/consent-form.tsx:136
 msgid "wants to access your <0/> account"
@@ -675,14 +659,6 @@ msgstr "あなたの <0/> アカウントにアクセスしようとしていま
 msgid "wants to uniquely identify you through your <0/> account"
 msgstr "あなたの <0/> アカウントを通じてあなたを識別しようとしています"
 
-#: src/views/authorize/sign-in/sign-in-form.tsx:200
-msgid "Warning"
-msgstr "警告"
-
-#: src/views/authorize/sign-up/sign-up-view.tsx:84
-#~ msgid "We're so excited to have you join us!"
-#~ msgstr "私たちはあなたが参加してくれることをとても楽しみにしています！"
-
 #: src/components/utils/password-strength-label.tsx:31
 msgid "Weak"
 msgstr "弱い"
@@ -691,7 +667,7 @@ msgstr "弱い"
 msgid "Wrong identifier or password"
 msgstr "識別子またはパスワードが間違っています"
 
-#: src/views/authorize/authorize-view.tsx:220
+#: src/views/authorize/authorize-view.tsx:222
 msgid "You are being redirected..."
 msgstr "リダイレクトしています…"
 
@@ -706,10 +682,6 @@ msgstr "新しいパスワードでサインインできるようになりまし
 #: src/views/authorize/reset-password/reset-password-confirm-form.tsx:53
 msgid "You will receive an email with a \"reset code\". Enter that code here then enter your new password."
 msgstr "「リセットコード」が記載されたメールが届きます。ここにコードを入力し、新しいパスワードを入力します。"
-
-#: src/views/authorize/sign-up/sign-up-view.tsx:121
-#~ msgid "Your account"
-#~ msgstr "あなたのアカウント"
 
 #. placeholder {0}: segment.length ? ( <strong className="text-gray-800 dark:text-gray-200"> {preview} </strong> ) : ( <span aria-hidden className="w-24 rounded-md bg-gray-300 p-2 dark:bg-slate-600" /> )
 #: src/views/authorize/sign-up/sign-up-handle-form.tsx:230
