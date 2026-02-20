@@ -51,6 +51,7 @@ export function validateFetchDest(
     | 'document'
     | 'embed'
     | 'font'
+    | 'iframe'
     | 'image'
     | 'manifest'
     | 'media'

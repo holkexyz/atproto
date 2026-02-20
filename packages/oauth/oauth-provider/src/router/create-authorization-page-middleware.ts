@@ -94,7 +94,8 @@ export function createAuthorizationPageMiddleware<
       // the same site but different origins (different subdomains).
       validateFetchSite(req, ['same-origin', 'cross-site', 'none'])
       validateFetchMode(req, ['navigate'])
-      validateFetchDest(req, ['document'])
+      // Allow 'iframe' to support embedding from trusted origins
+      validateFetchDest(req, ['document', 'iframe'])
       validateOrigin(req, issuerOrigin)
 
       // Do not perform any of the following logic if the request is invalid
