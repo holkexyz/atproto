@@ -24,21 +24,8 @@ export function ExternalProviderForm({
       )
     }
     const trimmedValue = value.trim()
-    let normalizedInput = trimmedValue
-    // If it looks like a bare domain (no protocol, not a DID, exactly two
-    // dot-separated parts like 'bsky.social'), prepend https:// so the OAuth
-    // resolver treats it as a hosting-provider URL rather than a handle.
-    if (
-      !normalizedInput.startsWith('http://') &&
-      !normalizedInput.startsWith('https://') &&
-      !normalizedInput.startsWith('did:') &&
-      normalizedInput.includes('.') &&
-      normalizedInput.split('.').length === 2
-    ) {
-      normalizedInput = 'https://' + normalizedInput
-    }
     window.parent.postMessage(
-      { type: 'switch-provider', input: normalizedInput },
+      { type: 'switch-provider', input: trimmedValue },
       '*',
     )
   }
