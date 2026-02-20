@@ -360,7 +360,17 @@ export class RequestManager {
         }
       }
     } catch (err) {
-      await this.store.deleteRequest(requestId)
+      // Do not delete the request when a different device tries to access it.
+      // The request is still valid for the original device. Deleting it would
+      // allow any third party (bot, crawler, browser extension) to deny service
+      // to the legitimate user by racing them to the authorize URL.
+      if (
+        !(err instanceof AccessDeniedError) ||
+        data.deviceId == null ||
+        data.deviceId === deviceId
+      ) {
+        await this.store.deleteRequest(requestId)
+      }
       throw err
     }
 
