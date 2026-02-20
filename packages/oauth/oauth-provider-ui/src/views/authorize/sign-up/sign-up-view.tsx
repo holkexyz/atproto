@@ -1,20 +1,20 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { ReactNode, useCallback, useState } from 'react'
+import HCaptcha from '@hcaptcha/react-hcaptcha'
+import { ReactNode, useCallback, useRef, useState } from 'react'
 import type { CustomizationData } from '@atproto/oauth-provider-api'
-import { WizardCard } from '../../../components/forms/wizard-card.tsx'
+import { Fieldset } from '../../../components/forms/fieldset.tsx'
+import { FormCardAsync } from '../../../components/forms/form-card-async.tsx'
+import { InputEmailAddress } from '../../../components/forms/input-email-address.tsx'
+import { InputText } from '../../../components/forms/input-text.tsx'
 import {
   LayoutTitlePage,
   LayoutTitlePageProps,
 } from '../../../components/layouts/layout-title-page.tsx'
+import { TokenIcon } from '../../../components/utils/icons.tsx'
 import { HelpCard } from '../../../components/utils/help-card.tsx'
+import { useBrowserColorScheme } from '../../../hooks/use-browser-color-scheme.ts'
 import { Override } from '../../../lib/util.ts'
-import {
-  SignUpAccountForm,
-  SignUpAccountFormOutput,
-} from './sign-up-account-form.tsx'
 import { SignUpDisclaimer } from './sign-up-disclaimer.tsx'
-import { SignUpHandleForm } from './sign-up-handle-form.tsx'
-import { SignUpHcaptchaForm } from './sign-up-hcaptcha-form.tsx'
 
 export type SignUpViewProps = Override<
   LayoutTitlePageProps,
@@ -23,13 +23,10 @@ export type SignUpViewProps = Override<
 
     onBack?: () => void
     backLabel?: ReactNode
-    onValidateNewHandle: (
-      data: { handle: string },
-      signal?: AbortSignal,
-    ) => void | PromiseLike<void>
     onDone: (
-      data: SignUpAccountFormOutput & {
-        handle: string
+      data: {
+        email: string
+        inviteCode?: string
         hcaptchaToken?: string
       },
       signal?: AbortSignal,
@@ -39,13 +36,11 @@ export type SignUpViewProps = Override<
 
 export function SignUpView({
   customizationData: {
-    availableUserDomains = [],
     hcaptchaSiteKey = undefined,
     inviteCodeRequired = true,
     links,
   } = {},
 
-  onValidateNewHandle,
   onDone,
   onBack,
   backLabel,
@@ -56,106 +51,107 @@ export function SignUpView({
   ...props
 }: SignUpViewProps) {
   const { t } = useLingui()
-  const [credentials, setCredentials] = useState<
-    undefined | SignUpAccountFormOutput
-  >(undefined)
-  const [handle, setHandle] = useState<undefined | string>(undefined)
-  const [hcaptcha, setHcaptcha] = useState<undefined | string>(undefined)
+  const theme = useBrowserColorScheme()
+  const captchaRef = useRef<HCaptcha>(null)
 
-  /**
-   * "false" indicates that the hcaptcha token is invalid (required but not provided)
-   */
-  const hcaptchaToken = hcaptchaSiteKey == null ? undefined : hcaptcha || false
+  const [email, setEmail] = useState<string | undefined>(undefined)
+  const [inviteCode, setInviteCode] = useState<string | undefined>(undefined)
+  const [hcaptchaToken, setHcaptchaToken] = useState<string | undefined>(
+    undefined,
+  )
 
-  const doDone = useCallback(
+  const onHcaptchaLoad = useCallback(() => {
+    captchaRef.current?.execute()
+  }, [])
+
+  const onHcaptchaVerify = useCallback((token: string) => {
+    setHcaptchaToken(token)
+  }, [])
+
+  const isValid =
+    email &&
+    (!inviteCodeRequired || inviteCode) &&
+    (hcaptchaSiteKey == null || hcaptchaToken)
+
+  const doSubmit = useCallback(
     (signal: AbortSignal) => {
-      if (credentials && handle && hcaptchaToken !== false) {
-        return onDone({ ...credentials, handle, hcaptchaToken }, signal)
+      if (isValid) {
+        return onDone(
+          {
+            email,
+            inviteCode: inviteCodeRequired ? inviteCode : undefined,
+            hcaptchaToken,
+          },
+          signal,
+        )
+      } else if (hcaptchaSiteKey && !hcaptchaToken && captchaRef.current) {
+        captchaRef.current.execute()
       }
     },
-    [credentials, handle, hcaptchaToken, onDone],
+    [
+      isValid,
+      email,
+      inviteCode,
+      inviteCodeRequired,
+      hcaptchaToken,
+      hcaptchaSiteKey,
+      onDone,
+    ],
   )
 
   return (
     <LayoutTitlePage
       {...props}
-      title={title ?? t`Create Account`}
-      subtitle={
-        subtitle ?? <Trans>We're so excited to have you join us!</Trans>
-      }
+      title={title ?? t`Sign up`}
+      subtitle={subtitle ?? <Trans>Enter your email to get started</Trans>}
     >
-      <WizardCard
-        doneLabel={<Trans>Sign up</Trans>}
-        onBack={onBack}
-        backLabel={backLabel}
-        onDone={doDone}
-        steps={[
-          // We use the handle input first since the "onValidateNewHandle" check
-          // will make it less likely that the actual signup call will fail, and
-          // will result in a better user experience, especially if there is an
-          // issue with the email address (e.g. already in use).
-          {
-            invalid: !handle,
-            titleRender: () => <Trans>Choose a username</Trans>,
-            contentRender: ({ prev, prevLabel, next, nextLabel, invalid }) => (
-              <SignUpHandleForm
-                className="grow"
-                invalid={invalid}
-                domains={availableUserDomains}
-                handle={handle}
-                onHandle={setHandle}
-                prevLabel={prevLabel}
-                onPrev={prev}
-                nextLabel={nextLabel}
-                onNext={async (signal) => {
-                  if (handle) await onValidateNewHandle({ handle }, signal)
-                  if (!signal.aborted) return next(signal)
-                }}
-              >
-                <SignUpDisclaimer links={links} />
-              </SignUpHandleForm>
-            ),
-          },
-          {
-            invalid: !credentials,
-            titleRender: () => <Trans>Your account</Trans>,
-            contentRender: ({ prev, prevLabel, next, nextLabel, invalid }) => (
-              <SignUpAccountForm
-                className="grow"
-                invalid={invalid}
-                prevLabel={prevLabel}
-                onPrev={prev}
-                nextLabel={nextLabel}
-                onNext={next}
-                inviteCodeRequired={inviteCodeRequired}
-                credentials={credentials}
-                onCredentials={setCredentials}
-              >
-                <SignUpDisclaimer links={links} />
-              </SignUpAccountForm>
-            ),
-          },
-          hcaptchaSiteKey != null && {
-            invalid: hcaptchaToken === false,
-            titleRender: () => <Trans>Verify you are human</Trans>,
-            contentRender: ({ prev, prevLabel, next, nextLabel, invalid }) => (
-              <SignUpHcaptchaForm
-                className="grow"
-                invalid={invalid}
-                siteKey={hcaptchaSiteKey}
-                token={hcaptcha}
-                onToken={setHcaptcha}
-                prevLabel={prevLabel}
-                onPrev={prev}
-                nextLabel={nextLabel}
-                onNext={next}
-              >
-                <SignUpDisclaimer links={links} />
-              </SignUpHcaptchaForm>
-            ),
-          },
-        ]}
-      />
+      <FormCardAsync
+        className="grow"
+        invalid={!isValid}
+        onCancel={onBack}
+        cancelLabel={backLabel}
+        onSubmit={doSubmit}
+        submitLabel={<Trans>Sign up</Trans>}
+        append={<SignUpDisclaimer links={links} />}
+      >
+        {inviteCodeRequired && (
+          <Fieldset label={<Trans>Invite code</Trans>}>
+            <InputText
+              icon={<TokenIcon className="w-5" />}
+              autoFocus
+              name="inviteCode"
+              title={t`Invite code`}
+              placeholder={t`example-com-xxxxx-xxxxx`}
+              required
+              value={inviteCode || ''}
+              onChange={(event) => {
+                setInviteCode(event.target.value || undefined)
+              }}
+              enterKeyHint="next"
+            />
+          </Fieldset>
+        )}
+
+        <Fieldset label={<Trans>Email</Trans>}>
+          <InputEmailAddress
+            autoFocus={!inviteCodeRequired}
+            name="email"
+            enterKeyHint={hcaptchaSiteKey ? 'next' : 'done'}
+            required
+            onEmail={setEmail}
+          />
+        </Fieldset>
+
+        {hcaptchaSiteKey != null && (
+          <HCaptcha
+            theme={theme}
+            sitekey={hcaptchaSiteKey}
+            onLoad={onHcaptchaLoad}
+            onVerify={onHcaptchaVerify}
+            ref={captchaRef}
+          />
+        )}
+      </FormCardAsync>
 
       <HelpCard className="mt-4" links={links} />
     </LayoutTitlePage>

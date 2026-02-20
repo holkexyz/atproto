@@ -15,7 +15,6 @@ import { Override } from '../../../lib/util.ts'
 
 export type SignUpAccountFormOutput = {
   email: string
-  password: string
   inviteCode?: string
 }
 

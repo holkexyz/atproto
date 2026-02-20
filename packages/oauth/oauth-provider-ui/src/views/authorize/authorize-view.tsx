@@ -146,7 +146,6 @@ export function AuthorizeView({
       <SignUpView
         {...props}
         customizationData={customizationData}
-        onValidateNewHandle={doValidateNewHandle}
         onBack={showHome}
         onDone={doSignUp}
       />
