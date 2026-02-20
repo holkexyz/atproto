@@ -83,7 +83,7 @@ msgstr "Avatar"
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
 #: src/views/authorize/otp/otp-code-form.tsx:81
-#: src/views/authorize/external-provider/external-provider-form.tsx:32
+#: src/views/authorize/external-provider/external-provider-form.tsx:38
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -168,7 +168,7 @@ msgstr "Confirmation code"
 
 #: src/views/error/cookie-error-view.tsx:34
 #: src/views/authorize/otp/otp-email-form.tsx:45
-#: src/views/authorize/external-provider/external-provider-form.tsx:33
+#: src/views/authorize/external-provider/external-provider-form.tsx:39
 msgid "Continue"
 msgstr "Continue"
 
@@ -203,6 +203,10 @@ msgstr "Description"
 #: src/views/authorize/otp/otp-code-form.tsx:88
 msgid "Didn't get it? Resend"
 msgstr "Didn't get it? Resend"
+
+#: src/views/authorize/external-provider/external-provider-form.tsx:46
+msgid "e.g. alice.bsky.social or bsky.social"
+msgstr "e.g. alice.bsky.social or bsky.social"
 
 #: src/views/authorize/sign-up/sign-up-view.tsx:140
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:113
@@ -289,7 +293,7 @@ msgstr "Forgot?"
 msgid "Grant access to your <0>{0}</0> account"
 msgstr "Grant access to your <0>{0}</0> account"
 
-#: src/views/authorize/external-provider/external-provider-form.tsx:35
+#: src/views/authorize/external-provider/external-provider-form.tsx:41
 msgid "Handle or hosting provider"
 msgstr "Handle or hosting provider"
 
@@ -630,6 +634,10 @@ msgstr "This email is already used"
 #: src/components/utils/error-message.tsx:48
 msgid "This handle is reserved"
 msgstr "This handle is reserved"
+
+#: src/views/authorize/external-provider/external-provider-form.tsx:23
+msgid "This page must be opened inside an iframe. Please use the sign-in flow from the application."
+msgstr "This page must be opened inside an iframe. Please use the sign-in flow from the application."
 
 #: src/components/utils/error-message.tsx:64
 msgid "This sign-in session has expired"

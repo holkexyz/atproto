@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useState } from 'react'
 import { Fieldset } from '../../../components/forms/fieldset.tsx'
 import { FormCardAsync } from '../../../components/forms/form-card-async.tsx'
@@ -14,9 +14,15 @@ export function ExternalProviderForm({
   onBack,
   defaultValue,
 }: ExternalProviderFormProps) {
+  const { t } = useLingui()
   const [value, setValue] = useState(defaultValue ?? 'bsky.social')
 
   const doSubmit = async (_signal: AbortSignal) => {
+    if (window.parent === window) {
+      throw new Error(
+        t`This page must be opened inside an iframe. Please use the sign-in flow from the application.`,
+      )
+    }
     const trimmedValue = value.trim()
     window.parent.postMessage(
       { type: 'switch-provider', input: trimmedValue },
@@ -37,7 +43,7 @@ export function ExternalProviderForm({
           icon={<AtSymbolIcon className="w-5" />}
           name="provider-input"
           type="text"
-          placeholder="e.g. alice.bsky.social or bsky.social"
+          placeholder={t`e.g. alice.bsky.social or bsky.social`}
           defaultValue={defaultValue ?? 'bsky.social'}
           autoFocus={true}
           required
