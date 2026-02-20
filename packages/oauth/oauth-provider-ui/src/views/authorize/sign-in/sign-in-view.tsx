@@ -128,8 +128,6 @@ export function SignInView({
         <SignInForm
           onSubmit={onSignIn}
           onForgotPassword={onForgotPassword}
-          onBack={onBack}
-          backLabel={backLabel}
           usernameDefault={loginHint}
           usernameReadonly={true}
         >
@@ -156,12 +154,7 @@ export function SignInView({
         title={title}
         subtitle={subtitle ?? <Trans>Enter your username and password</Trans>}
       >
-        <SignInForm
-          onSubmit={onSignIn}
-          onForgotPassword={onForgotPassword}
-          onBack={onBack}
-          backLabel={backLabel}
-        >
+        <SignInForm onSubmit={onSignIn} onForgotPassword={onForgotPassword}>
           {onAuthenticated && (
             <div className="text-center text-sm text-slate-600 dark:text-slate-400">
               <button

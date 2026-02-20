@@ -10,7 +10,6 @@ import { InputCheckbox } from '../../../components/forms/input-checkbox.tsx'
 import { InputPassword } from '../../../components/forms/input-password.tsx'
 import { InputText } from '../../../components/forms/input-text.tsx'
 import { InputToken } from '../../../components/forms/input-token.tsx'
-import { Admonition } from '../../../components/utils/admonition.tsx'
 import { AtSymbolIcon } from '../../../components/utils/icons.tsx'
 import { AsyncActionController } from '../../../hooks/use-async-action.ts'
 import {
@@ -196,13 +195,6 @@ export function SignInForm({
           required
         />
       </Fieldset>
-
-      <Admonition role="alert" title={<Trans>Warning</Trans>}>
-        <Trans>
-          Please verify the domain name of the website before entering your
-          password. Never enter your password on a domain you do not trust.
-        </Trans>
-      </Admonition>
 
       <InputCheckbox
         name="remember"
