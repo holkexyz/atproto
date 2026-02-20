@@ -22,20 +22,18 @@ export async function up(db: Kysely<unknown>): Promise<void> {
         brandName: 'Certified',
         logoUrl:
           'https://certified-app-seven.vercel.app/assets/certified_brandmark.svg',
-        brandColor: '#0F2544',
+        brandColor: '#5fa1e2',
         supportEmail: 'support@certified.earth',
       },
       {
-        clientId:
-          'https://maearth.io/.well-known/oauth-client-metadata',
+        clientId: 'https://maearth.io/.well-known/oauth-client-metadata',
         brandName: 'Ma Earth',
         logoUrl: 'https://maearth.io/logo.png',
         brandColor: '#2D6A4F',
         supportEmail: 'support@maearth.io',
       },
       {
-        clientId:
-          'https://gainforest.org/.well-known/oauth-client-metadata',
+        clientId: 'https://gainforest.org/.well-known/oauth-client-metadata',
         brandName: 'GainForest',
         logoUrl: 'https://gainforest.org/logo.png',
         brandColor: '#0B6E4F',
