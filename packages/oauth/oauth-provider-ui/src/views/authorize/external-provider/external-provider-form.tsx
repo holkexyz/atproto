@@ -31,25 +31,34 @@ export function ExternalProviderForm({
   }
 
   return (
-    <FormCardAsync
-      onSubmit={doSubmit}
-      invalid={!value.trim()}
-      onCancel={onBack}
-      cancelLabel={<Trans>Back</Trans>}
-      submitLabel={<Trans>Continue</Trans>}
-    >
-      <Fieldset label={<Trans>Handle or hosting provider</Trans>}>
-        <InputText
-          icon={<AtSymbolIcon className="w-5" />}
-          name="provider-input"
-          type="text"
-          placeholder={t`e.g. alice.bsky.social or bsky.social`}
-          defaultValue={defaultValue ?? 'bsky.social'}
-          autoFocus={true}
-          required
-          onChange={(event) => setValue(event.target.value)}
-        />
-      </Fieldset>
-    </FormCardAsync>
+    <>
+      <FormCardAsync
+        onSubmit={doSubmit}
+        invalid={!value.trim()}
+        submitLabel={<Trans>Continue</Trans>}
+      >
+        <Fieldset label={<Trans>Handle or hosting provider</Trans>}>
+          <InputText
+            icon={<AtSymbolIcon className="w-5" />}
+            name="provider-input"
+            type="text"
+            placeholder={t`e.g. alice.bsky.social or bsky.social`}
+            defaultValue={defaultValue ?? 'bsky.social'}
+            autoFocus={true}
+            required
+            onChange={(event) => setValue(event.target.value)}
+          />
+        </Fieldset>
+      </FormCardAsync>
+      <div className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
+        <button
+          type="button"
+          className="underline hover:no-underline"
+          onClick={onBack}
+        >
+          <Trans>Sign in with Certified</Trans>
+        </button>
+      </div>
+    </>
   )
 }
