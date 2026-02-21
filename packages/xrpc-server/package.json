@@ -30,7 +30,7 @@
     "@atproto/lexicon": "workspace:^",
     "@atproto/ws-client": "workspace:^",
     "@atproto/xrpc": "workspace:^",
-    "express": "^4.17.2",
+    "express": "^4.21.0",
     "http-errors": "^2.0.0",
     "mime-types": "^2.1.35",
     "rate-limiter-flexible": "^2.4.1",
