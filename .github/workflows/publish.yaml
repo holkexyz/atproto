@@ -19,23 +19,23 @@ jobs:
     if: github.repository == 'bluesky-social/atproto'
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       # https://github.com/actions/setup-node/issues/531#issuecomment-2960522861
       - name: Install Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
       - name: Enable Corepack
         run: corepack enable
       - name: Configure Dependency Cache
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           cache: 'pnpm'
       - run: npm i -g npm@latest
       - run: pnpm i --frozen-lockfile
       - name: Publish
-        uses: changesets/action@v1
+        uses: changesets/action@e87c8ed249971350e47fab7515075f44eb134e5b # v1
         id: changesets
         with:
           publish: pnpm release
