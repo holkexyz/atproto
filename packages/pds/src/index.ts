@@ -75,6 +75,13 @@ export class PDS {
     secrets: ServerSecrets,
     overrides?: Partial<AppContextOptions>,
   ): Promise<PDS> {
+    if (cfg.service.devMode && process.env.NODE_ENV === 'production') {
+      throw new Error(
+        'PDS_DEV_MODE cannot be enabled when NODE_ENV=production. ' +
+          'This would disable critical security controls.',
+      )
+    }
+
     const ctx = await AppContext.fromConfig(cfg, secrets, overrides)
 
     const { rateLimits } = ctx.cfg

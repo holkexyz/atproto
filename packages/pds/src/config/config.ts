@@ -328,6 +328,13 @@ export const envToCfg = (env: ServerEnvironment): ServerConfig => {
     lexiconCfg.didAuthority = env.lexiconDidAuthority
   }
 
+  if (serviceCfg.devMode) {
+    console.warn(
+      '⚠️  WARNING: PDS_DEV_MODE is enabled. HTTPS enforcement and SSRF protection are DISABLED. ' +
+        'Do NOT use this in production.',
+    )
+  }
+
   return {
     service: serviceCfg,
     db: dbCfg,
