@@ -71,7 +71,14 @@ function buildClientBrandingCss(branding?: ClientBranding): string | undefined {
   const extra: string[] = []
   if (branding.lightColor) {
     const rgb = hexToRgb(branding.lightColor)
-    if (rgb) extra.push(`body { background-color: rgb(${rgb.r} ${rgb.g} ${rgb.b}) !important; }`)
+    if (rgb) {
+      extra.push(`body { background-color: rgb(${rgb.r} ${rgb.g} ${rgb.b}) !important; }`)
+      // If background is dark, use light text
+      const lum = luminance(rgb)
+      if (lum < 0.2) {
+        extra.push(`body { color: rgb(255 255 255) !important; }`)
+      }
+    }
   }
 
   if (vars.length === 0 && extra.length === 0) return undefined
