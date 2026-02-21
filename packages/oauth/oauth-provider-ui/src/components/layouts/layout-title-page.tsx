@@ -47,8 +47,8 @@ export function LayoutTitlePage({
           'md:self-stretch',
           'md:max-w-fix md:w-1/2 md:p-4',
           'md:text-right',
-          'md:dark:border-r md:dark:border-slate-700',
-          'md:bg-slate-100 md:dark:bg-slate-800',
+          'md:dark:border-r md:dark:border-contrast-200',
+          'md:bg-contrast-25 md:dark:bg-contrast-25',
         )}
       >
         <div className="grid grow content-center md:justify-items-end">
@@ -64,7 +64,7 @@ export function LayoutTitlePage({
           {subtitle && (
             <p
               key="subtitle"
-              className="hidden max-w-xs text-slate-600 md:block dark:text-slate-400"
+              className="hidden max-w-xs text-contrast-600 md:block dark:text-contrast-600"
             >
               {subtitle}
             </p>

@@ -52,7 +52,7 @@ export function Button({
 
         // Outline
         'outline-none',
-        'focus:ring-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-black',
+        'focus:ring-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-contrast-0',
 
         // Background & Text
         color === 'primary'
@@ -65,9 +65,9 @@ export function Button({
           : color === 'grey'
             ? clsx(
                 'accent-primary',
-                'text-slate-600 dark:text-slate-300',
-                'hover:bg-gray-200 dark:hover:bg-gray-700',
-                transparent ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800',
+                'text-contrast-700 dark:text-contrast-700',
+                'hover:bg-contrast-100 dark:hover:bg-contrast-100',
+                transparent ? 'bg-transparent' : 'bg-contrast-50 dark:bg-contrast-50',
               )
             : undefined,
         'disabled:opacity-50',

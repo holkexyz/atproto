@@ -53,13 +53,13 @@ export function InputContainer({
 
         // Outline
         'outline-none',
-        'focus:ring-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-black',
-        'has-focus:ring-primary has-focus:ring-2 has-focus:ring-offset-1 has-focus:ring-offset-white dark:has-focus:ring-offset-black',
+        'focus:ring-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-contrast-0',
+        'has-focus:ring-primary has-focus:ring-2 has-focus:ring-offset-1 has-focus:ring-offset-contrast-0',
 
         // Background
-        'bg-gray-100 dark:bg-gray-800',
+        'bg-contrast-50 dark:bg-contrast-50',
         actionable
-          ? 'cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700'
+          ? 'cursor-pointer hover:bg-contrast-100 dark:hover:bg-contrast-100'
           : undefined,
 
         className,
@@ -76,7 +76,7 @@ export function InputContainer({
           bellow ? 'rounded-bl-none rounded-br-none' : undefined,
 
           // Font
-          'text-slate-600 dark:text-slate-300',
+          'text-contrast-700 dark:text-contrast-700',
         )}
       >
         {icon && (
@@ -84,7 +84,7 @@ export function InputContainer({
             className={clsx(
               'flex shrink-0 grow-0 items-center justify-center',
               'mx-2',
-              hasFocus ? 'text-primary' : 'text-slate-500',
+              hasFocus ? 'text-primary' : 'text-contrast-500',
             )}
           >
             {icon}
@@ -104,9 +104,9 @@ export function InputContainer({
             // Border
             'rounded-br-2 rounded-bl-2',
             // Background
-            'bg-gray-200 dark:bg-slate-700',
+            'bg-contrast-100 dark:bg-contrast-100',
             // Font
-            'text-gray-700 dark:text-gray-300',
+            'text-contrast-700 dark:text-contrast-700',
             'text-sm italic',
           )}
         >
