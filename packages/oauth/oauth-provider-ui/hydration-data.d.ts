@@ -13,6 +13,15 @@ export type AuthorizeData = {
   clientTrusted: boolean
   clientFirstParty: boolean
   clientBrandColor?: string
+  clientBranding?: {
+    primaryColor?: string
+    primaryColorContrast?: string
+    lightColor?: string
+    darkColor?: string
+    errorColor?: string
+    warningColor?: string
+    successColor?: string
+  }
 
   scope?: string
   loginHint?: string
