@@ -17,8 +17,8 @@ msgstr ""
 msgid "2FA Confirmation"
 msgstr "Confirmation 2FA"
 
-#: src/views/authorize/otp/otp-code-form.tsx:98
-#: src/views/authorize/otp/otp-code-form.tsx:113
+#: src/views/authorize/otp/otp-code-form.tsx:91
+#: src/views/authorize/otp/otp-code-form.tsx:106
 msgid "6-digit code"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr "Photo de profile"
 #: src/views/authorize/sign-in/sign-in-form.tsx:131
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
-#: src/views/authorize/otp/otp-code-form.tsx:81
+#: src/views/authorize/otp/otp-code-form.tsx:74
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -120,7 +120,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "Appeler"
 
-#: src/views/authorize/authorize-view.tsx:199
+#: src/views/authorize/authorize-view.tsx:201
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -166,7 +166,7 @@ msgid "Confirmation code"
 msgstr "Code de confirmation"
 
 #: src/views/error/cookie-error-view.tsx:34
-#: src/views/authorize/otp/otp-email-form.tsx:43
+#: src/views/authorize/otp/otp-email-form.tsx:41
 #: src/views/authorize/external-provider/external-provider-form.tsx:38
 msgid "Continue"
 msgstr "Continuer"
@@ -199,7 +199,7 @@ msgstr "Refuser l'accès"
 msgid "Description"
 msgstr "Description"
 
-#: src/views/authorize/otp/otp-code-form.tsx:88
+#: src/views/authorize/otp/otp-code-form.tsx:81
 msgid "Didn't get it? Resend"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 msgid "e.g. alice.bsky.social or bsky.social"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:140
+#: src/views/authorize/sign-up/sign-up-view.tsx:133
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
@@ -215,7 +215,7 @@ msgstr "Email"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:50
+#: src/views/authorize/otp/otp-email-form.tsx:43
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "Adresse email"
@@ -236,7 +236,7 @@ msgstr "Saisissez l'email que vous avez utilisé pour créer votre compte. Nous 
 msgid "Enter your email address"
 msgstr "Saisissez votre adresse email"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:108
+#: src/views/authorize/sign-up/sign-up-view.tsx:106
 msgid "Enter your email to get started"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr "Saisissez votre nom d'utilisateur et votre mot de passe"
 msgid "Error"
 msgstr "Erreur"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:129
+#: src/views/authorize/sign-up/sign-up-view.tsx:122
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "exemple-com-xxxxx-xxxxx"
@@ -325,8 +325,8 @@ msgstr "Sélecteur de langue"
 msgid "Invalid"
 msgstr "Invalide"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:123
-#: src/views/authorize/sign-up/sign-up-view.tsx:128
+#: src/views/authorize/sign-up/sign-up-view.tsx:116
+#: src/views/authorize/sign-up/sign-up-view.tsx:121
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:95
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
@@ -341,7 +341,7 @@ msgstr "Il semble que votre navigateur n'accepte pas les cookies. Appuyez sur \"
 msgid "Let's get your password reset!"
 msgstr "Réinitialisons votre mot de passe !"
 
-#: src/views/authorize/authorize-view.tsx:238
+#: src/views/authorize/authorize-view.tsx:240
 msgid "Login complete"
 msgstr "Connexion terminée"
 
@@ -461,8 +461,8 @@ msgstr "Lire l'adresse e-mail de votre compte"
 
 #: src/views/authorize/sign-in/sign-in-form.tsx:201
 #: src/views/authorize/sign-in/sign-in-form.tsx:206
-#: src/views/authorize/otp/otp-code-form.tsx:124
-#: src/views/authorize/otp/otp-code-form.tsx:128
+#: src/views/authorize/otp/otp-code-form.tsx:117
+#: src/views/authorize/otp/otp-code-form.tsx:121
 msgid "Remember this account on this device"
 msgstr "Se souvenir de ce compte sur cet appareil"
 
@@ -471,7 +471,7 @@ msgstr "Se souvenir de ce compte sur cet appareil"
 msgid "Repository"
 msgstr "Données publiques"
 
-#: src/views/authorize/otp/otp-code-form.tsx:85
+#: src/views/authorize/otp/otp-code-form.tsx:78
 msgid "Resend available in {cooldown}s"
 msgstr ""
 
@@ -495,7 +495,7 @@ msgstr "Sélectionner le domaine"
 msgid "Select from an existing account"
 msgstr "Sélectionner un compte"
 
-#: src/views/authorize/otp/otp-code-form.tsx:95
+#: src/views/authorize/otp/otp-code-form.tsx:88
 msgid "Sent to {email} (if an account exists)"
 msgstr ""
 
@@ -522,7 +522,7 @@ msgstr "Se connecter en tant que..."
 #: src/views/authorize/sign-in/sign-in-view.tsx:168
 #: src/views/authorize/sign-in/sign-in-view.tsx:202
 #: src/views/authorize/sign-in/sign-in-view.tsx:240
-#: src/views/authorize/otp/otp-email-form.tsx:68
+#: src/views/authorize/otp/otp-email-form.tsx:61
 msgid "Sign in with ATProto/Bluesky"
 msgstr ""
 
@@ -536,8 +536,8 @@ msgstr ""
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:107
-#: src/views/authorize/sign-up/sign-up-view.tsx:114
+#: src/views/authorize/sign-up/sign-up-view.tsx:105
+#: src/views/authorize/sign-up/sign-up-view.tsx:112
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "S'inscrire"
@@ -671,7 +671,7 @@ msgstr "Nom d'utilisateur ou adresse email"
 msgid "Valid"
 msgstr "Valide"
 
-#: src/views/authorize/otp/otp-code-form.tsx:74
+#: src/views/authorize/otp/otp-code-form.tsx:72
 msgid "Verify"
 msgstr ""
 
@@ -691,7 +691,7 @@ msgstr "Faible"
 msgid "Wrong identifier or password"
 msgstr "Identifiant ou mot de passe incorrect"
 
-#: src/views/authorize/authorize-view.tsx:239
+#: src/views/authorize/authorize-view.tsx:241
 msgid "You are being redirected..."
 msgstr "Vous êtes redirigé..."
 

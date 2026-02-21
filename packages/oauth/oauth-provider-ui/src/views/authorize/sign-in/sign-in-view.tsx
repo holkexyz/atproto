@@ -19,6 +19,7 @@ export type SignInViewProps = Override<
     sessions: readonly Session[]
     selectSub: (sub: string | null) => void
     loginHint?: string
+    autoSubmit?: boolean
 
     onSignIn: (
       credentials: SignInFormOutput,
@@ -39,6 +40,7 @@ export type SignInViewProps = Override<
 export function SignInView({
   api,
   loginHint,
+  autoSubmit,
   sessions,
   selectSub,
 
@@ -124,6 +126,7 @@ export function SignInView({
         <OtpSignInView
           api={api}
           loginHint={loginHint}
+          autoSubmit={autoSubmit}
           onAuthenticated={onAuthenticated}
           onSwitchToExternalProvider={() => setMode('external-provider')}
         />

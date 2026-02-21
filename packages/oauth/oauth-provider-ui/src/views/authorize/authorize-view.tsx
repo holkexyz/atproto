@@ -95,6 +95,8 @@ export function AuthorizeView({
     undefined,
   )
 
+  const [otpAutoSubmit, setOtpAutoSubmit] = useState(false)
+
   const {
     api,
     sessions,
@@ -160,6 +162,7 @@ export function AuthorizeView({
           } catch (error) {
             if (error instanceof EmailTakenError) {
               setOtpEmailHint(data.email)
+              setOtpAutoSubmit(true)
               setView(View.SignIn)
               return // swallow the error — we are redirecting
             }
@@ -188,6 +191,7 @@ export function AuthorizeView({
         {...props}
         api={api}
         loginHint={otpEmailHint ?? authorizeData.loginHint}
+        autoSubmit={otpAutoSubmit}
         sessions={sessions}
         selectSub={selectSub}
         onSignIn={doSignIn}

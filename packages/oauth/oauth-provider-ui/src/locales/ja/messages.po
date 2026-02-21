@@ -17,8 +17,8 @@ msgstr ""
 msgid "2FA Confirmation"
 msgstr "２要素認証の確認"
 
-#: src/views/authorize/otp/otp-code-form.tsx:98
-#: src/views/authorize/otp/otp-code-form.tsx:113
+#: src/views/authorize/otp/otp-code-form.tsx:91
+#: src/views/authorize/otp/otp-code-form.tsx:106
 msgid "6-digit code"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr "アバター"
 #: src/views/authorize/sign-in/sign-in-form.tsx:131
 #: src/views/authorize/reset-password/reset-password-view.tsx:65
 #: src/views/authorize/reset-password/reset-password-view.tsx:95
-#: src/views/authorize/otp/otp-code-form.tsx:81
+#: src/views/authorize/otp/otp-code-form.tsx:74
 #: src/views/authorize/consent/consent-form.tsx:99
 #: src/components/forms/wizard-card.tsx:93
 msgid "Back"
@@ -120,7 +120,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "呼び出し"
 
-#: src/views/authorize/authorize-view.tsx:199
+#: src/views/authorize/authorize-view.tsx:201
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -166,7 +166,7 @@ msgid "Confirmation code"
 msgstr "確認コード"
 
 #: src/views/error/cookie-error-view.tsx:34
-#: src/views/authorize/otp/otp-email-form.tsx:43
+#: src/views/authorize/otp/otp-email-form.tsx:41
 #: src/views/authorize/external-provider/external-provider-form.tsx:38
 msgid "Continue"
 msgstr ""
@@ -199,7 +199,7 @@ msgstr "拒否する"
 msgid "Description"
 msgstr "説明"
 
-#: src/views/authorize/otp/otp-code-form.tsx:88
+#: src/views/authorize/otp/otp-code-form.tsx:81
 msgid "Didn't get it? Resend"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 msgid "e.g. alice.bsky.social or bsky.social"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:140
+#: src/views/authorize/sign-up/sign-up-view.tsx:133
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:113
 #: src/components/utils/scope-description.tsx:239
 msgid "Email"
@@ -215,7 +215,7 @@ msgstr "メールアドレス"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:50
+#: src/views/authorize/otp/otp-email-form.tsx:43
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "メールアドレス"
@@ -236,7 +236,7 @@ msgstr "アカウントの作成に使用したメールアドレスを入力し
 msgid "Enter your email address"
 msgstr "メールアドレスを入力してください"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:108
+#: src/views/authorize/sign-up/sign-up-view.tsx:106
 msgid "Enter your email to get started"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr "ユーザー名とパスワードを入力してください"
 msgid "Error"
 msgstr "エラー"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:129
+#: src/views/authorize/sign-up/sign-up-view.tsx:122
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:101
 msgid "example-com-xxxxx-xxxxx"
 msgstr "example-com-xxxxx-xxxxx"
@@ -325,8 +325,8 @@ msgstr "言語選択"
 msgid "Invalid"
 msgstr "無効"
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:123
-#: src/views/authorize/sign-up/sign-up-view.tsx:128
+#: src/views/authorize/sign-up/sign-up-view.tsx:116
+#: src/views/authorize/sign-up/sign-up-view.tsx:121
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:95
 #: src/views/authorize/sign-up/sign-up-account-form.tsx:100
 msgid "Invite code"
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Let's get your password reset!"
 msgstr "パスワードをリセットしましょう！"
 
-#: src/views/authorize/authorize-view.tsx:238
+#: src/views/authorize/authorize-view.tsx:240
 msgid "Login complete"
 msgstr "ログイン完了"
 
@@ -461,8 +461,8 @@ msgstr "あなたのアカウントのメールアドレスを読み取る"
 
 #: src/views/authorize/sign-in/sign-in-form.tsx:201
 #: src/views/authorize/sign-in/sign-in-form.tsx:206
-#: src/views/authorize/otp/otp-code-form.tsx:124
-#: src/views/authorize/otp/otp-code-form.tsx:128
+#: src/views/authorize/otp/otp-code-form.tsx:117
+#: src/views/authorize/otp/otp-code-form.tsx:121
 msgid "Remember this account on this device"
 msgstr "このアカウントをこのデバイスに記憶する"
 
@@ -471,7 +471,7 @@ msgstr "このアカウントをこのデバイスに記憶する"
 msgid "Repository"
 msgstr "リポジトリ"
 
-#: src/views/authorize/otp/otp-code-form.tsx:85
+#: src/views/authorize/otp/otp-code-form.tsx:78
 msgid "Resend available in {cooldown}s"
 msgstr ""
 
@@ -495,7 +495,7 @@ msgstr "ドメインを選択"
 msgid "Select from an existing account"
 msgstr "既存のアカウントから選択"
 
-#: src/views/authorize/otp/otp-code-form.tsx:95
+#: src/views/authorize/otp/otp-code-form.tsx:88
 msgid "Sent to {email} (if an account exists)"
 msgstr ""
 
@@ -522,7 +522,7 @@ msgstr "アカウントの選択"
 #: src/views/authorize/sign-in/sign-in-view.tsx:168
 #: src/views/authorize/sign-in/sign-in-view.tsx:202
 #: src/views/authorize/sign-in/sign-in-view.tsx:240
-#: src/views/authorize/otp/otp-email-form.tsx:68
+#: src/views/authorize/otp/otp-email-form.tsx:61
 msgid "Sign in with ATProto/Bluesky"
 msgstr ""
 
@@ -536,8 +536,8 @@ msgstr ""
 msgid "Sign in with email code instead"
 msgstr ""
 
-#: src/views/authorize/sign-up/sign-up-view.tsx:107
-#: src/views/authorize/sign-up/sign-up-view.tsx:114
+#: src/views/authorize/sign-up/sign-up-view.tsx:105
+#: src/views/authorize/sign-up/sign-up-view.tsx:112
 #: src/views/authorize/sign-in/sign-in-picker.tsx:53
 msgid "Sign up"
 msgstr "サインアップ"
@@ -671,7 +671,7 @@ msgstr "ユーザー名またはメールアドレス"
 msgid "Valid"
 msgstr "有効"
 
-#: src/views/authorize/otp/otp-code-form.tsx:74
+#: src/views/authorize/otp/otp-code-form.tsx:72
 msgid "Verify"
 msgstr ""
 
@@ -691,7 +691,7 @@ msgstr "弱い"
 msgid "Wrong identifier or password"
 msgstr "識別子またはパスワードが間違っています"
 
-#: src/views/authorize/authorize-view.tsx:239
+#: src/views/authorize/authorize-view.tsx:241
 msgid "You are being redirected..."
 msgstr "リダイレクトしています…"
 
