@@ -91,6 +91,7 @@ export function sendWebAppFactory<P extends keyof HydrationData>(
     res: ServerResponse,
     options: SendWebAppOptions & {
       data: Omit<HydrationData[P], '__customizationData'>
+      styles?: (Html | AssetRef | undefined)[]
     },
   ): Promise<void> {
     await setupCsrfToken(
@@ -116,7 +117,7 @@ export function sendWebAppFactory<P extends keyof HydrationData>(
         meta: [{ name: 'robots', content: 'noindex' }],
         body: html`<div id="root"></div>`,
         scripts: [script, ...scripts],
-        styles: [...styles, customizationCss],
+        styles: [...styles, customizationCss, ...(options.styles ?? [])],
       }),
     )
   }
