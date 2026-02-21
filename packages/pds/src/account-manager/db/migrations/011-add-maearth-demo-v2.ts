@@ -19,8 +19,8 @@ export async function down(db: Kysely<unknown>): Promise<void> {
     .deleteFrom('trusted_client' as never)
     .where(
       'clientId' as never,
-      '=',
-      'https://maearth-demo-v2.vercel.app/.well-known/oauth-client-metadata',
+      '=' as never,
+      'https://maearth-demo-v2.vercel.app/.well-known/oauth-client-metadata' as never,
     )
     .execute()
 }
