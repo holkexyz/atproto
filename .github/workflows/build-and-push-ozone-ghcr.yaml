@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   USERNAME: ${{ github.actor }}
-  PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
@@ -33,7 +32,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.USERNAME }}
-          password: ${{ env.PASSWORD }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract Docker metadata
         id: meta

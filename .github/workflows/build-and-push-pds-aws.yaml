@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ${{ secrets.AWS_ECR_REGISTRY_USEAST2_PACKAGES_REGISTRY }}
   USERNAME: ${{ secrets.AWS_ECR_REGISTRY_USEAST2_PACKAGES_USERNAME }}
-  PASSWORD: ${{ secrets.AWS_ECR_REGISTRY_USEAST2_PACKAGES_PASSWORD }}
   IMAGE_NAME: pds
 
 jobs:
@@ -31,7 +30,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.USERNAME}}
-          password: ${{ env.PASSWORD }}
+          password: ${{ secrets.AWS_ECR_REGISTRY_USEAST2_PACKAGES_PASSWORD }}
 
       - name: Extract Docker metadata
         id: meta

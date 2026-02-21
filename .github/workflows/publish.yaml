@@ -10,9 +10,6 @@ permissions:
   contents: write
   pull-requests: write
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   build:
     name: Build & Publish
@@ -42,3 +39,6 @@ jobs:
           version: pnpm run version-packages
           commit: 'Version packages'
           title: 'Version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
