@@ -92,7 +92,7 @@ export function OtpCodeForm({
       }
     >
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        <Trans>Sent to {email}</Trans>
+        <Trans>Sent to {email} (if an account exists)</Trans>
       </p>
 
       <Fieldset label={<Trans>6-digit code</Trans>}>

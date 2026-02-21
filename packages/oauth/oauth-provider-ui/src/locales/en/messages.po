@@ -496,8 +496,8 @@ msgid "Select from an existing account"
 msgstr "Select from an existing account"
 
 #: src/views/authorize/otp/otp-code-form.tsx:95
-msgid "Sent to {email}"
-msgstr "Sent to {email}"
+msgid "Sent to {email} (if an account exists)"
+msgstr "Sent to {email} (if an account exists)"
 
 #: src/views/authorize/welcome/welcome-view.tsx:45
 #: src/views/authorize/sign-in/sign-in-form.tsx:140
