@@ -655,6 +655,12 @@ export function createApiMiddleware<
           deviceId,
         )
 
+        // Rate limiting: per IP (30/15min), per device (15/15min)
+        await server.accountManager.checkOtpVerifyRateLimit({
+          deviceId,
+          ipAddress: deviceMetadata.ipAddress,
+        })
+
         // Delegate to AccountManager which delegates to AccountStore
         const result = await server.accountManager.verifyOtp({
           deviceId,

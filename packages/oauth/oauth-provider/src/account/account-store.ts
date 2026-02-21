@@ -222,10 +222,23 @@ export interface AccountStore {
     ipAddress: string
     clientId: string
   }): Awaitable<void>
+
+  /**
+   * Check and record OTP verify rate limits (per IP and device).
+   * Optional — if not implemented, rate limiting is skipped.
+   * @throws {InvalidRequestError} - When rate limit is exceeded
+   */
+  checkOtpVerifyRateLimit?(data: {
+    deviceId: string
+    ipAddress: string
+  }): Awaitable<void>
 }
 
 export const isAccountStore = buildInterfaceChecker<
-  Omit<AccountStore, 'requestOtp' | 'verifyOtp' | 'checkOtpRateLimit'>
+  Omit<
+    AccountStore,
+    'requestOtp' | 'verifyOtp' | 'checkOtpRateLimit' | 'checkOtpVerifyRateLimit'
+  >
 >([
   'createAccount',
   'authenticateAccount',
