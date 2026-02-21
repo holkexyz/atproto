@@ -13,13 +13,17 @@ export interface OtpEmailFormProps {
   onSwitchToExternalProvider: () => void
 }
 
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+
 export function OtpEmailForm({
   api,
   loginHint,
   onCodeSent,
   onSwitchToExternalProvider,
 }: OtpEmailFormProps) {
-  const [email, setEmail] = useState<string | undefined>(loginHint)
+  const emailHint =
+    loginHint && EMAIL_RE.test(loginHint) ? loginHint : undefined
+  const [email, setEmail] = useState<string | undefined>(emailHint)
   const { showBoundary } = useErrorBoundary<UnknownRequestUriError>()
 
   const doSubmit = async (signal: AbortSignal) => {
@@ -43,11 +47,11 @@ export function OtpEmailForm({
         <Fieldset label={<Trans>Email address</Trans>}>
           <InputEmailAddress
             name="email"
-            defaultValue={loginHint}
+            defaultValue={emailHint}
             required
-            autoFocus={!loginHint}
-            readOnly={!!loginHint}
-            disabled={!!loginHint}
+            autoFocus={!emailHint}
+            readOnly={!!emailHint}
+            disabled={!!emailHint}
             onEmail={setEmail}
           />
         </Fieldset>

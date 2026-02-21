@@ -17,12 +17,18 @@ export interface OtpSignInViewProps {
   onSwitchToExternalProvider: () => void
 }
 
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+
 export function OtpSignInView(props: OtpSignInViewProps) {
+  const emailHint =
+    props.loginHint && EMAIL_RE.test(props.loginHint)
+      ? props.loginHint
+      : undefined
   const [step, setStep] = useState<'email' | 'code'>(
-    props.autoSubmit && props.loginHint ? 'code' : 'email',
+    props.autoSubmit && emailHint ? 'code' : 'email',
   )
   const [email, setEmail] = useState(
-    props.autoSubmit && props.loginHint ? props.loginHint : '',
+    props.autoSubmit && emailHint ? emailHint : '',
   )
   const { showBoundary } = useErrorBoundary<UnknownRequestUriError>()
 
