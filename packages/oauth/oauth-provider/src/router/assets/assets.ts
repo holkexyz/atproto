@@ -6,7 +6,7 @@ import { buildCustomizationData } from '../../customization/build-customization-
 import { Customization } from '../../customization/customization.js'
 import { CspConfig, mergeCsp } from '../../lib/csp/index.js'
 import { declareHydrationData } from '../../lib/html/hydration-data.js'
-import { cssCode, html } from '../../lib/html/index.js'
+import { type AssetRef, type Html, cssCode, html } from '../../lib/html/index.js'
 import { combineMiddlewares } from '../../lib/http/middleware.js'
 import { WriteResponseOptions } from '../../lib/http/response.js'
 import {
