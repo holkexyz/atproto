@@ -9,6 +9,7 @@ import * as mig008 from './008-trusted-clients'
 import * as mig009 from './009-otp-codes'
 import * as mig010 from './010-otp-rate-limits'
 import * as mig011 from './011-add-maearth-demo-v2'
+import * as mig012 from './012-client-branding-colors'
 
 export default {
   '001': mig001,
@@ -22,4 +23,5 @@ export default {
   '009': mig009,
   '010': mig010,
   '011': mig011,
+  '012': mig012,
 }
