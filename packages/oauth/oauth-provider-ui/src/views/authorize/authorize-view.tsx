@@ -161,8 +161,17 @@ export function AuthorizeView({
             await doSignUp(data, signal)
           } catch (error) {
             if (error instanceof EmailTakenError) {
-              setOtpEmailHint(data.email)
-              setOtpAutoSubmit(true)
+              const email = data.email
+              try {
+                await api.doOtpRequest(email)
+              } catch {
+                // If OTP request fails, fall back to showing sign-in with email pre-filled
+                setOtpEmailHint(email)
+                setView(View.SignIn)
+                return
+              }
+              setOtpEmailHint(email)
+              setOtpAutoSubmit(true) // OTP already sent, skip to code step
               setView(View.SignIn)
               return // swallow the error — we are redirecting
             }

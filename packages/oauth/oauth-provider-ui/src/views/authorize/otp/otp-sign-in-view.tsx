@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useErrorBoundary } from 'react-error-boundary'
 import { Account, Api, UnknownRequestUriError } from '../../../lib/api.ts'
 import { OtpCodeForm } from './otp-code-form.tsx'
@@ -18,29 +18,13 @@ export interface OtpSignInViewProps {
 }
 
 export function OtpSignInView(props: OtpSignInViewProps) {
-  const [step, setStep] = useState<'email' | 'code'>('email')
-  const [email, setEmail] = useState('')
+  const [step, setStep] = useState<'email' | 'code'>(
+    props.autoSubmit && props.loginHint ? 'code' : 'email',
+  )
+  const [email, setEmail] = useState(
+    props.autoSubmit && props.loginHint ? props.loginHint : '',
+  )
   const { showBoundary } = useErrorBoundary<UnknownRequestUriError>()
-
-  useEffect(() => {
-    if (!props.autoSubmit || !props.loginHint) return
-    let cancelled = false
-    props.api
-      .doOtpRequest(props.loginHint)
-      .then(() => {
-        if (!cancelled) {
-          setEmail(props.loginHint!)
-          setStep('code')
-        }
-      })
-      .catch((error) => {
-        if (error instanceof UnknownRequestUriError) showBoundary(error)
-        // On other errors, fall through to email form (user can retry manually)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, []) // Empty deps — only run on mount
 
   const handleResend = async () => {
     try {
