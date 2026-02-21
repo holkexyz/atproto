@@ -1,5 +1,56 @@
+# Dependencies (installed in Docker build)
 node_modules
+
+# Build artifacts (built in Docker build)
 **/dist
-.DS_Store
+
+# Environment and secrets
+.env
+.env.*
+.*.env
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Git
 .git
+.gitignore
+.gitattributes
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker (prevent recursive context)
 Dockerfile
+docker-compose*.yaml
+docker-compose*.yml
+
+# CI/CD
+.github/
+
+# Development tools
+.claude/
+.beads/
+.changeset/
+coverage/
+*.log
+*.tsbuildinfo
+
+# Documentation (contains infrastructure details)
+AGENTS.md
+*.md
+!README.md
+
+# Test files
+**/test.env
+**/tests/
+**/test/
+interop-test-files/
+jest.config.js
+jest.setup.ts
+vitest.config.ts
