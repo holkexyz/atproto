@@ -1,4 +1,9 @@
-import { KeyObject, createPublicKey, createSecretKey } from 'node:crypto'
+import {
+  KeyObject,
+  createPublicKey,
+  createSecretKey,
+  timingSafeEqual,
+} from 'node:crypto'
 import { IncomingMessage, ServerResponse } from 'node:http'
 import * as jose from 'jose'
 import KeyEncoder from 'key-encoder'
@@ -131,7 +136,11 @@ export class AuthVerifier {
       throw new AuthRequiredError()
     }
     const { username, password } = parsed
-    if (username !== 'admin' || password !== this._adminPass) {
+    const passMatch =
+      username === 'admin' &&
+      password.length === this._adminPass.length &&
+      timingSafeEqual(Buffer.from(password), Buffer.from(this._adminPass))
+    if (!passMatch) {
       throw new AuthRequiredError()
     }
 

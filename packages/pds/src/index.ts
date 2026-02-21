@@ -4,6 +4,7 @@
 // leave at top of file before importing Routes
 import 'express-async-errors'
 
+import { timingSafeEqual } from 'node:crypto'
 import events from 'node:events'
 import http from 'node:http'
 import { PlcClientError } from '@did-plc/lib'
@@ -115,11 +116,15 @@ export class PDS {
               : (opts) => new MemoryRateLimiter(opts),
             bypass: ({ req }) => {
               const { bypassKey, bypassIps } = rateLimits
-              if (
-                bypassKey &&
-                bypassKey === req.headers['x-ratelimit-bypass']
-              ) {
-                return true
+              if (bypassKey) {
+                const header = req.headers['x-ratelimit-bypass']
+                if (
+                  typeof header === 'string' &&
+                  header.length === bypassKey.length &&
+                  timingSafeEqual(Buffer.from(bypassKey), Buffer.from(header))
+                ) {
+                  return true
+                }
               }
               if (bypassIps && bypassIps.includes(req.ip)) {
                 return true

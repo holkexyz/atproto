@@ -1,4 +1,4 @@
-import crypto from 'node:crypto'
+import crypto, { timingSafeEqual } from 'node:crypto'
 import * as ui8 from 'uint8arrays'
 import { sha256 } from '@atproto/crypto'
 
@@ -28,7 +28,11 @@ export const verify = async (
 ): Promise<boolean> => {
   const [salt, hash] = storedHash.split(':')
   const derivedHash = await getDerivedHash(password, salt)
-  return hash === derivedHash
+  if (hash.length !== derivedHash.length) return false
+  return timingSafeEqual(
+    Buffer.from(hash, 'hex'),
+    Buffer.from(derivedHash, 'hex'),
+  )
 }
 
 export const getDerivedHash = (
