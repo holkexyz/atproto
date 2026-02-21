@@ -118,11 +118,13 @@ export class ClientManager {
     const isFirstParty = partialInfo?.isFirstParty ?? false
     const isTrusted = partialInfo?.isTrusted ?? isFirstParty
     const brandColor = partialInfo?.brandColor
+    const branding = partialInfo?.branding
 
     return new Client(clientId, metadata, jwks, {
       isFirstParty,
       isTrusted,
       brandColor,
+      branding,
     })
   }
 

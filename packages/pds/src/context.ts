@@ -406,10 +406,24 @@ export class AppContext {
                 accountManager.db,
                 clientId,
               )
+              const brandingObj = {
+                primaryColor: branding?.primaryColor ?? undefined,
+                primaryColorContrast:
+                  branding?.primaryColorContrast ?? undefined,
+                lightColor: branding?.lightColor ?? undefined,
+                darkColor: branding?.darkColor ?? undefined,
+                errorColor: branding?.errorColor ?? undefined,
+                warningColor: branding?.warningColor ?? undefined,
+                successColor: branding?.successColor ?? undefined,
+              }
+              const hasBranding = Object.values(brandingObj).some(
+                (v) => v !== undefined,
+              )
               return {
                 isFirstParty: true,
                 isTrusted: true,
                 brandColor: branding?.brandColor ?? undefined,
+                branding: hasBranding ? brandingObj : undefined,
               }
             }
 
