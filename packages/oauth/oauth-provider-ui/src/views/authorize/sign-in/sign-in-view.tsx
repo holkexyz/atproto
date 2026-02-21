@@ -19,7 +19,6 @@ export type SignInViewProps = Override<
     sessions: readonly Session[]
     selectSub: (sub: string | null) => void
     loginHint?: string
-    brandColor?: string
 
     onSignIn: (
       credentials: SignInFormOutput,
@@ -42,7 +41,6 @@ export function SignInView({
   loginHint,
   sessions,
   selectSub,
-  brandColor,
 
   onSignIn,
   onAuthenticated,
@@ -126,7 +124,6 @@ export function SignInView({
         <OtpSignInView
           api={api}
           loginHint={loginHint}
-          brandColor={brandColor}
           onAuthenticated={onAuthenticated}
           onSwitchToExternalProvider={() => setMode('external-provider')}
         />

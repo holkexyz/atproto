@@ -153,7 +153,6 @@ export function AuthorizeView({
       <SignUpView
         {...props}
         customizationData={customizationData}
-        brandColor={authorizeData.clientBrandColor}
         onBack={showHome}
         onDone={async (data, signal) => {
           try {
@@ -189,7 +188,6 @@ export function AuthorizeView({
         {...props}
         api={api}
         loginHint={otpEmailHint ?? authorizeData.loginHint}
-        brandColor={authorizeData.clientBrandColor}
         sessions={sessions}
         selectSub={selectSub}
         onSignIn={doSignIn}

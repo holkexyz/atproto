@@ -9,7 +9,6 @@ import { Api, UnknownRequestUriError } from '../../../lib/api.ts'
 export interface OtpEmailFormProps {
   api: Api
   loginHint?: string
-  brandColor?: string
   onCodeSent: (email: string) => void
   onSwitchToExternalProvider: () => void
 }
@@ -17,7 +16,6 @@ export interface OtpEmailFormProps {
 export function OtpEmailForm({
   api,
   loginHint,
-  brandColor,
   onCodeSent,
   onSwitchToExternalProvider,
 }: OtpEmailFormProps) {
@@ -41,11 +39,6 @@ export function OtpEmailForm({
         onSubmit={doSubmit}
         invalid={!email}
         submitLabel={<Trans>Continue</Trans>}
-        submitStyle={
-          brandColor
-            ? { backgroundColor: brandColor, borderColor: brandColor }
-            : undefined
-        }
       >
         <Fieldset label={<Trans>Email address</Trans>}>
           <InputEmailAddress

@@ -7,7 +7,6 @@ import { OtpEmailForm } from './otp-email-form.tsx'
 export interface OtpSignInViewProps {
   api: Api
   loginHint?: string
-  brandColor?: string
   onAuthenticated: (result: {
     account: Account
     ephemeralToken?: string
@@ -36,7 +35,6 @@ export function OtpSignInView(props: OtpSignInViewProps) {
       <OtpEmailForm
         api={props.api}
         loginHint={props.loginHint}
-        brandColor={props.brandColor}
         onCodeSent={(sentEmail) => {
           setEmail(sentEmail)
           setStep('code')
@@ -50,7 +48,6 @@ export function OtpSignInView(props: OtpSignInViewProps) {
     <OtpCodeForm
       api={props.api}
       email={email}
-      brandColor={props.brandColor}
       onVerified={props.onAuthenticated}
       onResend={handleResend}
       onBack={() => setStep('email')}

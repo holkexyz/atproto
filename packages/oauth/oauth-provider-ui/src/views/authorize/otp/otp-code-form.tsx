@@ -12,7 +12,6 @@ const RESEND_COOLDOWN_SECONDS = 60
 export interface OtpCodeFormProps {
   api: Api
   email: string
-  brandColor?: string
   onVerified: (result: {
     account: Account
     ephemeralToken?: string
@@ -27,7 +26,6 @@ export interface OtpCodeFormProps {
 export function OtpCodeForm({
   api,
   email,
-  brandColor,
   onVerified,
   onResend,
   onBack,
@@ -72,11 +70,6 @@ export function OtpCodeForm({
       onSubmit={doSubmit}
       invalid={code.length !== 6}
       submitLabel={<Trans>Verify</Trans>}
-      submitStyle={
-        brandColor
-          ? { backgroundColor: brandColor, borderColor: brandColor }
-          : undefined
-      }
       onCancel={onBack}
       cancelLabel={<Trans>Back</Trans>}
       append={
