@@ -8,6 +8,7 @@ import {
 } from '../../components/layouts/layout-title-page.tsx'
 import { useApi } from '../../hooks/use-api.ts'
 import { useBoundDispatch } from '../../hooks/use-bound-dispatch.ts'
+import { EmailTakenError } from '../../lib/api.ts'
 import { Override } from '../../lib/util.ts'
 import { ConsentView } from './consent/consent-view.tsx'
 import { ResetPasswordView } from './reset-password/reset-password-view.tsx'
@@ -90,6 +91,10 @@ export function AuthorizeView({
     string | undefined
   >(undefined)
 
+  const [otpEmailHint, setOtpEmailHint] = useState<string | undefined>(
+    undefined,
+  )
+
   const {
     api,
     sessions,
@@ -150,7 +155,18 @@ export function AuthorizeView({
         customizationData={customizationData}
         brandColor={authorizeData.clientBrandColor}
         onBack={showHome}
-        onDone={doSignUp}
+        onDone={async (data, signal) => {
+          try {
+            await doSignUp(data, signal)
+          } catch (error) {
+            if (error instanceof EmailTakenError) {
+              setOtpEmailHint(data.email)
+              setView(View.SignIn)
+              return // swallow the error — we are redirecting
+            }
+            throw error // re-throw other errors
+          }
+        }}
       />
     )
   }
@@ -172,7 +188,7 @@ export function AuthorizeView({
       <SignInView
         {...props}
         api={api}
-        loginHint={authorizeData.loginHint}
+        loginHint={otpEmailHint ?? authorizeData.loginHint}
         brandColor={authorizeData.clientBrandColor}
         sessions={sessions}
         selectSub={selectSub}

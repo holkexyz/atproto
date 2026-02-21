@@ -120,7 +120,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr ""
 
-#: src/views/authorize/authorize-view.tsx:183
+#: src/views/authorize/authorize-view.tsx:199
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Let's get your password reset!"
 msgstr ""
 
-#: src/views/authorize/authorize-view.tsx:222
+#: src/views/authorize/authorize-view.tsx:238
 msgid "Login complete"
 msgstr ""
 
@@ -691,7 +691,7 @@ msgstr ""
 msgid "Wrong identifier or password"
 msgstr ""
 
-#: src/views/authorize/authorize-view.tsx:223
+#: src/views/authorize/authorize-view.tsx:239
 msgid "You are being redirected..."
 msgstr ""
 

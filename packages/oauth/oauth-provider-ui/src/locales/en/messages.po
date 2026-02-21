@@ -120,7 +120,7 @@ msgctxt "RPC lxm"
 msgid "Call"
 msgstr "Call"
 
-#: src/views/authorize/authorize-view.tsx:183
+#: src/views/authorize/authorize-view.tsx:199
 #: src/views/authorize/welcome/welcome-view.tsx:51
 #: src/components/forms/form-card-async.tsx:87
 msgid "Cancel"
@@ -341,7 +341,7 @@ msgstr "It seems that your browser is not accepting cookies. Press \"Continue\" 
 msgid "Let's get your password reset!"
 msgstr "Let's get your password reset!"
 
-#: src/views/authorize/authorize-view.tsx:222
+#: src/views/authorize/authorize-view.tsx:238
 msgid "Login complete"
 msgstr "Login complete"
 
@@ -691,7 +691,7 @@ msgstr "Weak"
 msgid "Wrong identifier or password"
 msgstr "Wrong identifier or password"
 
-#: src/views/authorize/authorize-view.tsx:223
+#: src/views/authorize/authorize-view.tsx:239
 msgid "You are being redirected..."
 msgstr "You are being redirected..."
 
