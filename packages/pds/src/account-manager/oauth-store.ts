@@ -612,6 +612,7 @@ export class OAuthStore
   async checkOtpVerifyRateLimit(data: {
     deviceId: string
     ipAddress: string
+    emailNorm: string
   }): Promise<void> {
     const WINDOW_MS = 15 * 60 * 1000
     await checkRateLimit(
@@ -626,8 +627,15 @@ export class OAuthStore
       15,
       WINDOW_MS,
     )
+    await checkRateLimit(
+      this.db,
+      `otp-verify:email:${data.emailNorm}`,
+      5,
+      WINDOW_MS,
+    )
     await recordRateLimitHit(this.db, `otp-verify:ip:${data.ipAddress}`)
     await recordRateLimitHit(this.db, `otp-verify:device:${data.deviceId}`)
+    await recordRateLimitHit(this.db, `otp-verify:email:${data.emailNorm}`)
   }
 
   // RequestStore

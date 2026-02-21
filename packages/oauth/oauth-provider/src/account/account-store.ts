@@ -231,6 +231,7 @@ export interface AccountStore {
   checkOtpVerifyRateLimit?(data: {
     deviceId: string
     ipAddress: string
+    emailNorm: string
   }): Awaitable<void>
 }
 

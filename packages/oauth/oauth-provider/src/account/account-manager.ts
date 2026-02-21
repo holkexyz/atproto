@@ -370,6 +370,7 @@ export class AccountManager {
   public async checkOtpVerifyRateLimit(data: {
     deviceId: string
     ipAddress: string
+    emailNorm: string
   }): Promise<void> {
     if (this.store.checkOtpVerifyRateLimit) {
       await this.store.checkOtpVerifyRateLimit(data)
