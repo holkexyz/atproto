@@ -166,7 +166,7 @@ msgid "Confirmation code"
 msgstr "確認コード"
 
 #: src/views/error/cookie-error-view.tsx:34
-#: src/views/authorize/otp/otp-email-form.tsx:41
+#: src/views/authorize/otp/otp-email-form.tsx:45
 #: src/views/authorize/external-provider/external-provider-form.tsx:38
 msgid "Continue"
 msgstr ""
@@ -215,7 +215,7 @@ msgstr "メールアドレス"
 
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:55
 #: src/views/authorize/reset-password/reset-password-request-form.tsx:60
-#: src/views/authorize/otp/otp-email-form.tsx:43
+#: src/views/authorize/otp/otp-email-form.tsx:47
 #: src/components/forms/input-email-address.tsx:51
 msgid "Email address"
 msgstr "メールアドレス"
@@ -522,7 +522,7 @@ msgstr "アカウントの選択"
 #: src/views/authorize/sign-in/sign-in-view.tsx:168
 #: src/views/authorize/sign-in/sign-in-view.tsx:202
 #: src/views/authorize/sign-in/sign-in-view.tsx:240
-#: src/views/authorize/otp/otp-email-form.tsx:61
+#: src/views/authorize/otp/otp-email-form.tsx:65
 msgid "Sign in with ATProto/Bluesky"
 msgstr ""
 
